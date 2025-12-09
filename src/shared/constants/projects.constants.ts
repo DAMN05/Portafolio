@@ -215,7 +215,7 @@ El proyecto se desarrolla mediante metodologías ágiles con sprints quincenales
   //githubUrl: '',
   //liveUrl: '',
   featured: true,
-  completedAt: 'En progreso',
+  completedAt: '2025-12',
 
   highlights: [
     'Librerías estadísticas y científicas desarrolladas totalmente desde cero',
