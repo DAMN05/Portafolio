@@ -1,7 +1,26 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  webpack: (config, { isServer }) => {
+    // No marcar three como external - debe ser bundle en el cliente
+    config.externals = config.externals.filter((external: any) => {
+      if (typeof external === 'object' && external.three) {
+        return false;
+      }
+      return true;
+    });
 
-export default nextConfig;
+    // Asegurar que three se resuelva correctamente
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        three: 'three',
+      };
+    }
+
+    return config;
+  },
+  reactStrictMode: false,
+}
+
+export default nextConfig
