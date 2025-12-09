@@ -193,13 +193,13 @@ El proyecto se desarrolla mediante metodologías ágiles con sprints quincenales
   
   technologies: [
     'Python',
-    'Custom Scientific Libraries',
+    'TypeScript',
+    'React',
+    'MQTT',
     'Custom Visualization Engine',
     'Socket Communication',
-    'MQTT',
-    'React',
-    'TypeScript',
     'Tailwind CSS',
+    'Custom Scientific Libraries',
     'Docker',
     'Raspberry Pi',
     'ESP32'
