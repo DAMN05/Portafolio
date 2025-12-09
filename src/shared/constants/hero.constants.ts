@@ -26,7 +26,7 @@ export const HERO_BADGE = {
 export const HERO_STATS = [
   {
     value: "1+",
-    label: "Años de experiencia"
+    label: "Año de experiencia"
   },
   {
     value: "7+",
