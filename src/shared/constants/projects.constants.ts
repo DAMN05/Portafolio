@@ -31,8 +31,8 @@ export const PROJECTS_DATA: Project[] = [
       '/images/projects/OMI/omi4.png',
     ],
     thumbnail: '/images/projects/OMI/omi.png',
-   //githubUrl: 'https://github.com/username/moviestream',
-  //liveUrl: 'https://moviestream.vercel.app',
+   //githubUrl: '',
+  //liveUrl: '',
   featured: true,
   completedAt: '2024-12',
   highlights: [
@@ -67,8 +67,8 @@ export const PROJECTS_DATA: Project[] = [
     '/images/projects/PORTF/portfolio3.png'
   ],
   thumbnail: '/images/projects/PORTF/INICIO.png',
-  //githubUrl: 'https://github.com/
-  //liveUrl: 'https://portfolio.vercel.app',
+  //githubUrl: ''
+  //liveUrl: '',
   featured: false,
   completedAt: '2025-01',
   highlights: [
@@ -104,8 +104,8 @@ export const PROJECTS_DATA: Project[] = [
       '/images/projects/CHECK/CREAR.png'
     ],
     thumbnail: '/images/projects/CHECK/KANBAN.png',
-   // githubUrl: 'https://github.com/username/todo-list-platform',
-    //liveUrl: 'https://todo-list-demo.vercel.app',
+   // githubUrl: '',
+    //liveUrl: '',
     featured: false,
     completedAt: '2025-01',
     highlights: [
@@ -154,8 +154,8 @@ SVT resuelve problemas comunes en la gestión de inventarios como errores manual
 
   thumbnail: '/images/projects/SVT/Inventario.png',
 
-  //githubUrl: 'https://github.com/username/svt',
-  //liveUrl: 'https://svt-demo.vercel.app',
+  //githubUrl: '',
+  //liveUrl: '',
   featured: true,
   completedAt: '2025-04',
 
@@ -176,7 +176,7 @@ SVT resuelve problemas comunes en la gestión de inventarios como errores manual
 
 {
   id: 'uv-weather-station',
-  title: 'Estación Meteorológica Inteligente UV — Nodo Principal y Sistema de Análisis',
+  title: 'Estación Meteorológica Inteligente UV ',
   shortDescription:
     'Red de estaciones meteorológicas universitarias con módulos estadísticos y librerías científicas desarrolladas desde cero, comunicación entre nodos y una interfaz gráfica propia diseñada para investigación ambiental.',
 
@@ -212,7 +212,7 @@ El proyecto se desarrolla mediante metodologías ágiles con sprints quincenales
 
   thumbnail: '/images/projects/ET/interfaz.png',
 
-  //githubUrl: 'https://github.com/username/uv-weather-station',
+  //githubUrl: '',
   //liveUrl: '',
   featured: true,
   completedAt: 'En progreso',
@@ -272,8 +272,8 @@ frontend–backend, despliegue en la web, gestión de datos y diseño visual.
 
   thumbnail: '/images/projects/NEXUN/INICIO.png',
 
-  //githubUrl: 'https://github.com/username/uv-video-platform',
-  //liveUrl: 'https://uvvideoplatform.vercel.app',
+  //githubUrl: '',
+  //liveUrl: ',
   featured: true,
   completedAt: '2025-02',
 
