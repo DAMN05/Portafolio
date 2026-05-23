@@ -1,4 +1,3 @@
-// src/core/repositories/ISocialLinkRepository.ts
 
 import { SocialLinkEntity } from '@/core/entities';
 

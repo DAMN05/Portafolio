@@ -1,5 +1,3 @@
-// src/infrastructure/repositories/ProjectRepository.ts
-
 import { IProjectRepository } from '@/core/repositories';
 import { ProjectEntity } from '@/core/entities';
 import { PROJECTS_DATA } from '@/shared/constants/projects.constants';

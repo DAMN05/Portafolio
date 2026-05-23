@@ -1,5 +1,3 @@
-// src/infrastructure/repositories/ExperienceRepository.ts
-
 import { IExperienceRepository } from '@/core/repositories';
 import { ExperienceEntity } from '@/core/entities';
 import { EXPERIENCE_DATA } from '@/shared/constants/about.constants';

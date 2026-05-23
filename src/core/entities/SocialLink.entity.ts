@@ -1,4 +1,3 @@
-// src/core/entities/SocialLink.entity.ts
 
 export class SocialLinkEntity {
   constructor(

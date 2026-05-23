@@ -1,4 +1,3 @@
-// src/core/usecases/social/GetAllSocialLinks.usecase.ts
 
 import { ISocialLinkRepository } from '@/core/repositories';
 import { SocialLinkEntity } from '@/core/entities';

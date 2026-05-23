@@ -1,4 +1,3 @@
-// src/core/repositories/IContactRepository.ts
 
 import { ContactMessageEntity } from '@/core/entities';
 

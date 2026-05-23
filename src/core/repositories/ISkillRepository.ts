@@ -1,4 +1,3 @@
-// src/core/repositories/ISkillRepository.ts
 
 import { SkillEntity } from '@/core/entities';
 

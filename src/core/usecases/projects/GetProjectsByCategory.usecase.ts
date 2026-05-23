@@ -1,4 +1,3 @@
-// src/core/usecases/projects/GetProjectsByCategory.usecase.ts
 
 import { IProjectRepository } from '@/core/repositories';
 import { ProjectEntity } from '@/core/entities';

@@ -1,4 +1,3 @@
-// src/core/entities/Skill.entity.ts
 
 export type SkillCategory = 'frontend' | 'backend' | '3d' | 'tools' | 'other';
 export type SkillLevel = 'Básico' | 'Intermedio' | 'Avanzado' | 'Experto';
@@ -23,7 +22,7 @@ export class SkillEntity {
       'Básico': 'bg-gray-500/20 text-gray-300',
       'Intermedio': 'bg-blue-500/20 text-blue-300',
       'Avanzado': 'bg-green-500/20 text-green-300',
-      'Experto': 'bg-purple-500/20 text-purple-300'
+      'Experto': 'bg-amber-500/20 text-amber-300'
     };
     return colors[this.level];
   }
