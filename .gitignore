@@ -35,6 +35,11 @@ lerna-debug.log*
 # vercel
 .vercel
 
+# Ignore repository-local GitHub skills and automation files
+.github/
+
+# Ignore local scripts and generated helper scripts
+scripts/
 # typescript
 *.tsbuildinfo
 next-env.d.ts

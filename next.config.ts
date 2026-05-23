@@ -3,8 +3,10 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   webpack: (config, { isServer }) => {
     // No marcar three como external - debe ser bundle en el cliente
-    config.externals = config.externals.filter((external: any) => {
-      if (typeof external === 'object' && external.three) {
+    const externals = Array.isArray(config.externals) ? config.externals : [];
+
+    config.externals = externals.filter((external: unknown) => {
+      if (typeof external === 'object' && external !== null && 'three' in (external as Record<string, unknown>)) {
         return false;
       }
       return true;
