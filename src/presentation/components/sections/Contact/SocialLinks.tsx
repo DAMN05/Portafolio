@@ -1,8 +1,6 @@
-// src/presentation/components/sections/Contact/SocialLinks.tsx
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
 import { SOCIAL_LINKS, CONTACT_INFO } from '@/shared/constants/contact.constants';
 import SocialIcon from '@/presentation/components/common/SocialIcon/SocialIcon';
 
@@ -11,36 +9,46 @@ export default function SocialLinks() {
   const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Asegurar visibilidad inicial
-      if (linksRef.current.length > 0) {
-        gsap.set(linksRef.current, { opacity: 1, y: 0 });
-        
-        gsap.from(linksRef.current, {
-          y: 20,
-          opacity: 0,
-          duration: 0.5,
-          stagger: 0.1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-            once: true,
-          },
-        });
-      }
-    }, containerRef);
+    let ctx: { revert: () => void } | undefined;
+    (async () => {
+      const gsapMod = await import('gsap');
+      const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
+      const scrollMod = await import('gsap/ScrollTrigger');
+      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      gsap.registerPlugin(ScrollTrigger);
 
-    return () => ctx.revert();
+      ctx = gsap.context(() => {
+        if (linksRef.current.length > 0) {
+          gsap.set(linksRef.current, { opacity: 1, y: 0 });
+          
+          gsap.from(linksRef.current, {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+              once: true,
+            },
+          });
+        }
+      }, containerRef);
+    })();
+
+    return () => {
+      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+    };
   }, []);
 
   return (
     <div ref={containerRef} className="space-y-8">
       {/* Info Cards */}
       <div className="space-y-4">
-        <div className="glass rounded-lg p-6">
-          <h4 className="text-sm font-semibold text-light-darker mb-2">Email</h4>
+        <div className="surface-card card-interactive rounded-2xl p-6">
+          <h4 className="text-sm font-semibold text-[color:var(--text-muted)] mb-2">Email</h4>
           <a 
             href={`mailto:${CONTACT_INFO.email}`}
             className="text-lg text-primary hover:underline"
@@ -49,14 +57,14 @@ export default function SocialLinks() {
           </a>
         </div>
 
-        <div className="glass rounded-lg p-6">
-          <h4 className="text-sm font-semibold text-light-darker mb-2">Ubicación</h4>
-          <p className="text-lg text-light">{CONTACT_INFO.location}</p>
+        <div className="surface-card card-interactive rounded-2xl p-6">
+          <h4 className="text-sm font-semibold text-[color:var(--text-muted)] mb-2">Ubicación</h4>
+          <p className="text-lg text-white">{CONTACT_INFO.location}</p>
         </div>
 
-        <div className="glass rounded-lg p-6">
-          <h4 className="text-sm font-semibold text-light-darker mb-2">Disponibilidad</h4>
-          <p className="text-lg text-light flex items-center gap-2">
+        <div className="surface-card card-interactive rounded-2xl p-6">
+          <h4 className="text-sm font-semibold text-[color:var(--text-muted)] mb-2">Disponibilidad</h4>
+          <p className="text-lg text-white flex items-center gap-2">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
             {CONTACT_INFO.availability}
           </p>
@@ -65,7 +73,7 @@ export default function SocialLinks() {
 
       {/* Social Links */}
       <div>
-        <h4 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+        <h4 className="section-heading text-lg font-bold text-white mb-6 flex items-center gap-2">
           <span className="w-1 h-6 bg-gradient-to-b from-primary to-secondary rounded-full"></span>
           Conéctate Conmigo
         </h4>
@@ -79,21 +87,15 @@ export default function SocialLinks() {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="opacity-100 group relative overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                opacity: 1
-              }}
+              className="surface-card card-interactive opacity-100 group relative overflow-hidden rounded-2xl p-6"
             >
               {/* Animated gradient background on hover */}
               <div 
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
                   background: social.id === 'linkedin' 
-                    ? 'linear-gradient(135deg, rgba(10,102,194,0.15) 0%, rgba(10,102,194,0.05) 100%)'
-                    : 'linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.05) 100%)'
+                    ? 'linear-gradient(135deg, rgba(125,211,252,0.15) 0%, rgba(125,211,252,0.05) 100%)'
+                    : 'linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.05) 100%)'
                 }}
               />
               
@@ -108,10 +110,10 @@ export default function SocialLinks() {
                   <div 
                     className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
                     style={{
-                      backgroundColor: social.id === 'linkedin' ? 'rgba(10,102,194,0.15)' : 'rgba(139,92,246,0.15)',
+                      backgroundColor: social.id === 'linkedin' ? 'rgba(125,211,252,0.15)' : 'rgba(245,158,11,0.15)',
                       boxShadow: social.id === 'linkedin' 
-                        ? '0 0 20px rgba(10,102,194,0.3)' 
-                        : '0 0 20px rgba(139,92,246,0.3)'
+                        ? '0 0 20px rgba(125,211,252,0.22)' 
+                        : '0 0 20px rgba(245,158,11,0.22)'
                     }}
                   >
                     <SocialIcon 
@@ -130,16 +132,16 @@ export default function SocialLinks() {
                         {social.name}
                       </span>
                       {/* Badge */}
-                      <span className="px-2 py-0.5 rounded-full text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      <span className="badge opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         style={{
-                          backgroundColor: social.id === 'linkedin' ? 'rgba(10,102,194,0.2)' : 'rgba(139,92,246,0.2)',
-                          color: social.id === 'linkedin' ? '#0A66C2' : '#a78bfa'
+                          backgroundColor: social.id === 'linkedin' ? 'rgba(125,211,252,0.18)' : 'rgba(245,158,11,0.18)',
+                          color: social.id === 'linkedin' ? '#7dd3fc' : '#fbbf24'
                         }}
                       >
                         Activo
                       </span>
                     </div>
-                    <p className="text-light-darker text-sm font-medium transition-colors duration-300 group-hover:text-light">
+                    <p className="text-[color:var(--text-muted)] text-sm font-medium transition-colors duration-300 group-hover:text-white">
                       {social.id === 'linkedin' ? '🚀 Ver perfil profesional' : '💻 Ver proyectos y código'}
                     </p>
                   </div>
@@ -148,7 +150,7 @@ export default function SocialLinks() {
                 {/* Arrow with circle background */}
                 <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 group-hover:bg-white/10 transition-all duration-300 group-hover:scale-110">
                   <svg 
-                    className="w-5 h-5 text-light-darker group-hover:text-white transition-all duration-300 group-hover:translate-x-1" 
+                    className="w-5 h-5 text-[color:var(--text-muted)] group-hover:text-white transition-all duration-300 group-hover:translate-x-1" 
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
@@ -166,18 +168,13 @@ export default function SocialLinks() {
       <a
         href={CONTACT_INFO.cvUrl}
         download
-        className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-accent/30 block"
-        style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255,255,255,0.1)'
-        }}
+        className="surface-card card-interactive group relative block overflow-hidden rounded-2xl p-6"
       >
         {/* Animated gradient background on hover */}
         <div 
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{
-            background: 'linear-gradient(135deg, rgba(255,193,7,0.15) 0%, rgba(255,193,7,0.05) 100%)'
+            background: 'linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(245,158,11,0.05) 100%)'
           }}
         />
         
@@ -217,16 +214,16 @@ export default function SocialLinks() {
                   Descargar CV
                 </span>
                 {/* Badge */}
-                <span className="px-2 py-0.5 rounded-full text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                <span className="badge opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   style={{
-                    backgroundColor: 'rgba(255,193,7,0.2)',
-                    color: '#ffc107'
+                    backgroundColor: 'rgba(245,158,11,0.18)',
+                    color: '#fbbf24'
                   }}
                 >
                   PDF
                 </span>
               </div>
-              <p className="text-light-darker text-sm font-medium transition-colors duration-300 group-hover:text-light">
+              <p className="text-[color:var(--text-muted)] text-sm font-medium transition-colors duration-300 group-hover:text-white">
                 📄 Curriculum vitae actualizado
               </p>
             </div>
@@ -235,7 +232,7 @@ export default function SocialLinks() {
           {/* Arrow with circle background */}
           <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 group-hover:bg-white/10 transition-all duration-300 group-hover:scale-110">
             <svg 
-              className="w-5 h-5 text-light-darker group-hover:text-white transition-all duration-300 group-hover:translate-y-1" 
+              className="w-5 h-5 text-[color:var(--text-muted)] group-hover:text-white transition-all duration-300 group-hover:translate-y-1" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"

@@ -1,10 +1,9 @@
-// src/presentation/components/sections/About/SkillsGrid.tsx
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Skill, SkillCategory, SkillLevel } from '@/shared/types/about.types';
+import { Skill, SkillCategory } from '@/shared/types/about.types';
 import { SKILL_CATEGORIES } from '@/shared/constants/about.constants';
 import {
   FaReact, FaNodeJs, FaGitAlt, FaDocker, FaFigma
@@ -19,7 +18,6 @@ import { IconType } from 'react-icons';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Mapeo de iconos por ID de skill
 const SKILL_ICONS: Record<string, IconType> = {
   react: FaReact,
   nextjs: TbBrandNextjs,
@@ -48,7 +46,6 @@ function SkillCard({ skill, index }: { skill: Skill; index: number }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Animación de entrada
       gsap.from(cardRef.current, {
         y: 30,
         opacity: 0,
@@ -65,51 +62,38 @@ function SkillCard({ skill, index }: { skill: Skill; index: number }) {
     return () => ctx.revert();
   }, [index]);
 
-  // Función auxiliar para obtener el color del badge según el nivel
-  const getLevelBadgeColor = (level: string): string => {
-    const colors: Record<string, string> = {
-      'Básico': 'bg-gray-500/20 text-gray-300 border-gray-500/30',
-      'Intermedio': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-      'Avanzado': 'bg-green-500/20 text-green-300 border-green-500/30',
-      'Experto': 'bg-purple-500/20 text-purple-300 border-purple-500/30'
-    };
-    return colors[level] || colors['Intermedio'];
-  };
-
   const SkillIcon = SKILL_ICONS[skill.id];
 
   return (
     <div
       ref={cardRef}
-      className="animate-card glass rounded-xl p-6 hover:scale-[1.02] transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 border border-white/5 group"
+      className="surface-card card-interactive rounded-2xl p-6 group"
     >
       {/* Icono */}
       <div 
-        className="w-12 h-12 rounded-lg mb-4 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300"
+        className="w-12 h-12 rounded-2xl mb-4 flex items-center justify-center text-3xl transition-transform duration-300 group-hover:scale-110"
         style={{ 
           backgroundColor: `${skill.color}20`,
           color: skill.color || '#3B82F6'
         }}
       >
-        {SkillIcon ? <SkillIcon /> : skill.name.charAt(0)}
+        {SkillIcon ? <SkillIcon aria-hidden="true" focusable="false" /> : skill.name.charAt(0)}
       </div>
 
       {/* Nombre de la skill */}
-      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors duration-300">
+      <h3 className="section-heading text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors duration-300">
         {skill.name}
       </h3>
 
       {/* Badge de nivel */}
       <div className="mb-3">
-        <span 
-          className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${getLevelBadgeColor(skill.level)}`}
-        >
+        <span className="badge badge-accent">
           {skill.level}
         </span>
       </div>
 
       {/* Descripción */}
-      <p className="text-sm text-gray-400 leading-relaxed">
+      <p className="text-sm leading-relaxed text-[color:var(--text-muted)]">
         {skill.description}
       </p>
     </div>
@@ -153,11 +137,13 @@ export default function SkillsGrid({ skills }: SkillsGridProps) {
       {/* Category Filter */}
       <div className="flex flex-wrap justify-center gap-3 mb-10">
         <button
+          type="button"
           onClick={() => setActiveCategory('all')}
-          className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+          aria-pressed={activeCategory === 'all'}
+          className={`btn px-5 py-2 text-sm transition-all duration-300 ${
             activeCategory === 'all'
-              ? 'bg-primary text-white'
-              : 'bg-dark-lighter text-light-darker hover:bg-primary/20'
+              ? 'btn-primary'
+              : 'btn-secondary'
           }`}
         >
           Todas
@@ -165,11 +151,13 @@ export default function SkillsGrid({ skills }: SkillsGridProps) {
         {SKILL_CATEGORIES.map(category => (
           <button
             key={category.id}
+            type="button"
             onClick={() => setActiveCategory(category.id as SkillCategory)}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+            aria-pressed={activeCategory === category.id}
+            className={`btn px-5 py-2 text-sm transition-all duration-300 ${
               activeCategory === category.id
-                ? 'bg-primary text-white'
-                : 'bg-dark-lighter text-light-darker hover:bg-primary/20'
+                ? 'btn-primary'
+                : 'btn-secondary'
             }`}
           >
             {category.label}

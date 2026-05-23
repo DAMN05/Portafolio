@@ -8,31 +8,43 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Manrope', 'ui-sans-serif', 'system-ui'],
+        display: ['Syne', 'ui-sans-serif'],
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1.5rem',
+          lg: '2rem',
+        },
+      },
       colors: {
         primary: {
-          DEFAULT: '#3B82F6',
-          light: '#60A5FA',
-          dark: '#2563EB',
+          DEFAULT: '#7dd3fc',
+          light: '#bae6fd',
+          dark: '#38bdf8',
         },
         secondary: {
-          DEFAULT: '#8B5CF6',
-          light: '#A78BFA',
-          dark: '#7C3AED',
+          DEFAULT: '#f59e0b',
+          light: '#fbbf24',
+          dark: '#d97706',
         },
         accent: {
-          DEFAULT: '#F59E0B',
-          light: '#FBBF24',
-          dark: '#D97706',
+          DEFAULT: '#34d399',
+          light: '#6ee7b7',
+          dark: '#10b981',
         },
         dark: {
-          DEFAULT: '#0F172A',
-          lighter: '#1E293B',
-          darker: '#020617',
+          DEFAULT: '#0a1120',
+          lighter: '#141f35',
+          darker: '#060a12',
         },
         light: {
-          DEFAULT: '#F8FAFC',
-          darker: '#F1F5F9',
-          darkest: '#E2E8F0',
+          DEFAULT: '#f5f7fb',
+          darker: '#cbd5e1',
+          darkest: '#a5b4c7',
         },
       },
       animation: {

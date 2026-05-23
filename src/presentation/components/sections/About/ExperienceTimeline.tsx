@@ -1,12 +1,8 @@
-// src/presentation/components/sections/About/ExperienceTimeline.tsx
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Experience } from '@/shared/types/about.types';
 
-gsap.registerPlugin(ScrollTrigger);
 
 interface ExperienceTimelineProps {
   experiences: Experience[];
@@ -22,50 +18,60 @@ function TimelineItem({ experience, index, isLast }: {
   const lineRef = useRef<HTMLDivElement>(null);
   const [showAllAchievements, setShowAllAchievements] = useState(false);
   const [showAllTechnologies, setShowAllTechnologies] = useState(false);
+  const achievementsId = `experience-${experience.id}-achievements`;
+  const technologiesId = `experience-${experience.id}-technologies`;
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animación del item
-      gsap.from(itemRef.current, {
-        x: index % 2 === 0 ? -50 : 50,
-        opacity: 0,
-        duration: 0.6,
-        scrollTrigger: {
-          trigger: itemRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      });
+    let ctx: { revert: () => void } | undefined;
+    (async () => {
+      const gsapMod = await import('gsap');
+      const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
+      const scrollMod = await import('gsap/ScrollTrigger');
+      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      gsap.registerPlugin(ScrollTrigger);
 
-      // Animación del dot
-      gsap.from(dotRef.current, {
-        scale: 0,
-        duration: 0.4,
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: dotRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      });
-
-      // Animación de la línea
-      if (!isLast && lineRef.current) {
-        gsap.from(lineRef.current, {
-          scaleY: 0,
+      ctx = gsap.context(() => {
+        gsap.from(itemRef.current, {
+          x: index % 2 === 0 ? -50 : 50,
+          opacity: 0,
           duration: 0.6,
-          delay: 0.4,
-          transformOrigin: 'top',
           scrollTrigger: {
-            trigger: lineRef.current,
+            trigger: itemRef.current,
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
         });
-      }
-    }, itemRef);
 
-    return () => ctx.revert();
+        gsap.from(dotRef.current, {
+          scale: 0,
+          duration: 0.4,
+          delay: 0.3,
+          scrollTrigger: {
+            trigger: dotRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+
+        if (!isLast && lineRef.current) {
+          gsap.from(lineRef.current, {
+            scaleY: 0,
+            duration: 0.6,
+            delay: 0.4,
+            transformOrigin: 'top',
+            scrollTrigger: {
+              trigger: lineRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+          });
+        }
+      }, itemRef);
+    })();
+
+    return () => {
+      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+    };
   }, [index, isLast]);
 
   const formatDate = (date: string) => {
@@ -81,7 +87,7 @@ function TimelineItem({ experience, index, isLast }: {
           ref={dotRef}
           className={`w-3 h-3 md:w-4 md:h-4 rounded-full ${
             experience.isCurrent ? 'bg-primary' : 'bg-secondary'
-          } z-10 ring-4 ring-dark`}
+            } z-10 ring-4 ring-[rgba(6,10,18,0.9)]`}
         />
         {!isLast && (
           <div
@@ -106,19 +112,19 @@ function TimelineItem({ experience, index, isLast }: {
           flex-1 md:w-5/12 md:flex-none
           ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}
         `}>
-          <div className="glass rounded-xl p-5 sm:p-6 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
+          <div className="surface-card card-interactive rounded-2xl p-5 sm:p-6">
             {/* Header con título y badge */}
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <h4 className="text-lg sm:text-xl font-bold text-white flex-1">{experience.title}</h4>
+              <h4 className="section-heading text-lg sm:text-xl font-bold text-white flex-1">{experience.title}</h4>
               {experience.isCurrent && (
-                <span className="px-3 py-1 bg-primary/20 text-primary text-xs rounded-full font-semibold">
+                <span className="badge badge-accent text-xs">
                   ✨ Actual
                 </span>
               )}
             </div>
             
             {/* Empresa, ubicación y fechas en una línea */}
-            <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-light-darker mb-4">
+            <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-[color:var(--text-muted)] mb-4">
               <span className="text-primary font-semibold">{experience.company}</span>
               {experience.location && (
                 <>
@@ -131,7 +137,7 @@ function TimelineItem({ experience, index, isLast }: {
             </div>
 
             {/* Descripción - más corta y concisa */}
-            <p className="text-light-darker mb-4 text-sm sm:text-base leading-relaxed">
+            <p className="text-[color:var(--text-muted)] mb-4 text-sm sm:text-base leading-relaxed">
               {experience.description}
             </p>
 
@@ -140,7 +146,7 @@ function TimelineItem({ experience, index, isLast }: {
               <div className="mb-4 p-3 bg-primary/5 rounded-lg border border-primary/10">
                 <div className="flex flex-wrap gap-2">
                   {experience.highlights.slice(0, 4).map((highlight, i) => (
-                    <span key={i} className="text-xs text-light-darker flex items-center gap-1.5">
+                    <span key={i} className="text-xs text-[color:var(--text-muted)] flex items-center gap-1.5">
                       <span className="text-primary">✓</span>
                       <span>{highlight}</span>
                     </span>
@@ -152,8 +158,8 @@ function TimelineItem({ experience, index, isLast }: {
             {/* Logros - Expandible */}
             {experience.achievements && experience.achievements.length > 0 && (
               <div className="mb-4">
-                <h5 className="text-xs font-semibold text-light uppercase tracking-wide mb-2">Responsabilidades clave</h5>
-                <ul className="text-xs sm:text-sm text-light-darker space-y-1.5">
+                <h5 className="text-xs font-semibold text-white uppercase tracking-wide mb-2">Responsabilidades clave</h5>
+                <ul id={achievementsId} className="text-xs sm:text-sm text-[color:var(--text-muted)] space-y-1.5">
                   {(showAllAchievements ? experience.achievements : experience.achievements.slice(0, 3)).map((achievement, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="text-primary mt-0.5 flex-shrink-0">▸</span>
@@ -163,7 +169,10 @@ function TimelineItem({ experience, index, isLast }: {
                 </ul>
                 {experience.achievements.length > 3 && (
                   <button
+                    type="button"
                     onClick={() => setShowAllAchievements(!showAllAchievements)}
+                    aria-expanded={showAllAchievements}
+                    aria-controls={achievementsId}
                     className="mt-2 text-xs text-primary hover:text-primary-light font-semibold flex items-center gap-1 transition-colors"
                   >
                     {showAllAchievements ? (
@@ -185,11 +194,11 @@ function TimelineItem({ experience, index, isLast }: {
             {/* Tecnologías - Expandible */}
             {experience.technologies && experience.technologies.length > 0 && (
               <div>
-                <div className="flex flex-wrap gap-1.5">
+                <div id={technologiesId} className="flex flex-wrap gap-1.5">
                   {(showAllTechnologies ? experience.technologies : experience.technologies.slice(0, 6)).map((tech, i) => (
                     <span
                       key={i}
-                      className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md"
+                      className="badge text-xs"
                     >
                       {tech}
                     </span>
@@ -197,7 +206,10 @@ function TimelineItem({ experience, index, isLast }: {
                 </div>
                 {experience.technologies.length > 6 && (
                   <button
+                    type="button"
                     onClick={() => setShowAllTechnologies(!showAllTechnologies)}
+                    aria-expanded={showAllTechnologies}
+                    aria-controls={technologiesId}
                     className="mt-2 text-xs text-primary hover:text-primary-light font-semibold flex items-center gap-1 transition-colors"
                   >
                     {showAllTechnologies ? (
@@ -230,27 +242,37 @@ export default function ExperienceTimeline({ experiences }: ExperienceTimelinePr
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(titleRef.current, {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      });
-    }, titleRef);
+    let ctx: { revert: () => void } | undefined;
+    (async () => {
+      const gsapMod = await import('gsap');
+      const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
+      const scrollMod = await import('gsap/ScrollTrigger');
+      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      gsap.registerPlugin(ScrollTrigger);
+      ctx = gsap.context(() => {
+        gsap.from(titleRef.current, {
+          y: 30,
+          opacity: 0,
+          duration: 0.6,
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }, titleRef);
+    })();
 
-    return () => ctx.revert();
+    return () => {
+      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+    };
   }, []);
 
   return (
     <div className="max-w-5xl mx-auto">
       <h3 
         ref={titleRef}
-        className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-12 sm:mb-16"
+        className="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-12 sm:mb-16"
       >
         Experiencia
       </h3>

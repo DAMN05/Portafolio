@@ -1,5 +1,3 @@
-// src/shared/constants/about.constants.ts
-
 import { AboutContent, Skill, Experience } from '@/shared/types/about.types';
 
 export const ABOUT_CONTENT: AboutContent = {
@@ -32,7 +30,6 @@ export const ABOUT_CONTENT: AboutContent = {
 };
 
 export const SKILLS_DATA: Skill[] = [
-  // Frontend
   {
     id: 'react',
     name: 'React',
@@ -70,7 +67,6 @@ export const SKILLS_DATA: Skill[] = [
     color: '#06B6D4',
   },
   
-  // Backend
   {
     id: 'nodejs',
     name: 'Node.js',
@@ -126,7 +122,6 @@ export const SKILLS_DATA: Skill[] = [
     color: '#009688',
   },
   
-  // 3D & Animation
   {
     id: 'threejs',
     name: 'Three.js',
@@ -147,7 +142,6 @@ export const SKILLS_DATA: Skill[] = [
     color: '#88CE02',
   },
   
-  // Tools
   {
     id: 'git',
     name: 'Git',

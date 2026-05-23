@@ -1,4 +1,3 @@
-// src/shared/types/contact.types.ts
 
 export interface ContactFormData {
     name: string;
@@ -28,5 +27,4 @@ export interface ContactFormData {
     title: string;
     subtitle: string;
     formTitle: string;
-    socialTitle: string;
   }

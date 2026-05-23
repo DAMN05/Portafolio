@@ -1,4 +1,3 @@
-// src/shared/types/about.types.ts
 
 export interface Stat {
     id: string;

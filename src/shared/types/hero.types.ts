@@ -13,12 +13,3 @@ export interface HeroContent {
     href: string;
     variant: 'primary' | 'secondary';
   }
-  
-  export interface Hero3DConfig {
-    particlesCount: number;
-    cameraPosition: [number, number, number];
-    animationSpeed: number;
-    mouseInfluence: number;
-    avatarUrl: string;
-    avatarPosition: [number, number, number];
-  }

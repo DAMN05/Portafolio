@@ -1,7 +1,6 @@
-// src/presentation/hooks/useContactForm.ts
 'use client';
 
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect, useRef, useState, ChangeEvent, FormEvent } from 'react';
 import { sendContactMessageUseCase } from '@/infrastructure/di/container';
 import { ContactFormData, ContactFormErrors, FormStatus } from '@/shared/types/contact.types';
 import { validateContactForm, sanitizeInput } from '@/shared/utils/validators';
@@ -18,6 +17,27 @@ export function useContactForm() {
   const [formData, setFormData] = useState<ContactFormData>(initialFormData);
   const [errors, setErrors] = useState<ContactFormErrors>({});
   const [status, setStatus] = useState<FormStatus>('idle');
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current) {
+        clearTimeout(resetTimerRef.current);
+      }
+    };
+  }, []);
+
+  const scheduleReset = () => {
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+    }
+
+    resetTimerRef.current = setTimeout(() => {
+      setStatus('idle');
+      setFeedbackMessage('');
+    }, 5000);
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -25,7 +45,6 @@ export function useContactForm() {
       ...prev,
       [name]: ['name', 'subject', 'message'].includes(name) ? value : sanitizeInput(value)
     }));
-    // Clear error for this field when user starts typing
     if (errors[name as keyof ContactFormErrors]) {
       setErrors(prev => ({
         ...prev,
@@ -37,7 +56,6 @@ export function useContactForm() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate form
     const validationErrors = validateContactForm(formData);
     
     if (Object.keys(validationErrors).length > 0) {
@@ -47,9 +65,9 @@ export function useContactForm() {
 
     setStatus('loading');
     setErrors({});
+    setFeedbackMessage('');
 
     try {
-      // Crear instancia de ContactMessageEntity
       const contactMessage = new ContactMessageEntity(
         '', // Generar un ID único si es necesario
         formData.name,
@@ -60,29 +78,25 @@ export function useContactForm() {
         'pending'
       );
 
-      // Enviar usando el caso de uso
       const result = await sendContactMessageUseCase.execute(contactMessage);
 
       if (result.success) {
         setStatus('success');
+        setFeedbackMessage('✓ ¡Mensaje enviado exitosamente! Te responderé pronto.');
         setFormData(initialFormData);
       } else {
         setStatus('error');
+        setFeedbackMessage(result.error || 'No pudimos enviar tu mensaje. Intenta nuevamente en unos segundos.');
         console.error('Error al enviar el mensaje:', result.error);
       }
 
-      // Resetear el estado después de 5 segundos
-      setTimeout(() => {
-        setStatus('idle');
-      }, 5000);
+      scheduleReset();
     } catch (error) {
       console.error('Error inesperado:', error);
       setStatus('error');
+      setFeedbackMessage('Ocurrió un error inesperado. Por favor intenta nuevamente.');
 
-      // Resetear el estado después de 5 segundos
-      setTimeout(() => {
-        setStatus('idle');
-      }, 5000);
+      scheduleReset();
     }
   };
 
@@ -90,12 +104,18 @@ export function useContactForm() {
     setFormData(initialFormData);
     setErrors({});
     setStatus('idle');
+    setFeedbackMessage('');
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = null;
+    }
   };
 
   return {
     formData,
     errors,
     status,
+    feedbackMessage,
     handleChange,
     handleSubmit,
     resetForm
