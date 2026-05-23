@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
-import { Manrope, Syne } from 'next/font/google'
+import { Manrope, Syne , Space_Mono} from 'next/font/google'
 import './globals.css'
 import { SEO } from '@/shared/constants'
 import Navbar from '@/presentation/components/layout/Header/Navbar'
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' })
+const space_mono = Space_Mono({ subsets: ['latin'],weight: ['400','700'] ,variable: '--font-space-mono' })
 const syne = Syne({ subsets: ['latin'], variable: '--font-syne' })
 
 export const metadata: Metadata = {
