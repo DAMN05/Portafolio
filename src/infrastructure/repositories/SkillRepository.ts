@@ -1,4 +1,3 @@
-// src/infrastructure/repositories/SkillRepository.ts
 
 import { ISkillRepository } from '@/core/repositories';
 import { SkillEntity } from '@/core/entities';

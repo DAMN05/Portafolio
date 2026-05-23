@@ -1,5 +1,3 @@
-// src/shared/utils/validators.ts
-
 import { ContactFormData, ContactFormErrors } from '@/shared/types/contact.types';
 
 export const validateEmail = (email: string): boolean => {
@@ -10,7 +8,6 @@ export const validateEmail = (email: string): boolean => {
 export const validateContactForm = (data: ContactFormData): ContactFormErrors => {
   const errors: ContactFormErrors = {};
 
-  // Validate name
   if (!data.name.trim()) {
     errors.name = 'El nombre es requerido';
   } else if (data.name.trim().length < 2) {
@@ -19,14 +16,12 @@ export const validateContactForm = (data: ContactFormData): ContactFormErrors =>
     errors.name = 'El nombre no puede exceder 50 caracteres';
   }
 
-  // Validate email
   if (!data.email.trim()) {
     errors.email = 'El email es requerido';
   } else if (!validateEmail(data.email)) {
     errors.email = 'Por favor ingresa un email válido';
   }
 
-  // Validate subject
   if (!data.subject.trim()) {
     errors.subject = 'El asunto es requerido';
   } else if (data.subject.trim().length < 3) {
@@ -35,7 +30,6 @@ export const validateContactForm = (data: ContactFormData): ContactFormErrors =>
     errors.subject = 'El asunto no puede exceder 100 caracteres';
   }
 
-  // Validate message
   if (!data.message.trim()) {
     errors.message = 'El mensaje es requerido';
   } else if (data.message.trim().length < 10) {

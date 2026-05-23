@@ -1,4 +1,3 @@
-// src/core/repositories/IExperienceRepository.ts
 
 import { ExperienceEntity } from '@/core/entities';
 

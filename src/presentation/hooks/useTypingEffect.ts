@@ -37,7 +37,6 @@ export const useTypingEffect = ({
           clearInterval(intervalId);
           setIsComplete(true);
           
-          // Si loop está activado, iniciar el proceso de borrado
           if (loop) {
             timeoutId = setTimeout(() => {
               startDeleting();
@@ -61,7 +60,6 @@ export const useTypingEffect = ({
           setIsDeleting(false);
           setIsComplete(false);
           
-          // Reiniciar el ciclo después de una pausa
           timeoutId = setTimeout(() => {
             currentIndex = 0;
             startTyping();

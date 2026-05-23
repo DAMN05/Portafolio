@@ -1,4 +1,3 @@
-// src/core/entities/Experience.entity.ts
 
 export type ExperienceType = 'work' | 'education' | 'freelance';
 

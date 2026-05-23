@@ -1,4 +1,3 @@
-// src/core/repositories/index.ts
 
 export type { IProjectRepository } from './IProjectRepository';
 export type { ISkillRepository } from './ISkillRepository';

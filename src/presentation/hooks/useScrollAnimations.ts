@@ -1,23 +1,25 @@
 'use client';
 
 import { useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export const useScrollAnimations = () => {
   useEffect(() => {
-    console.log('🎬 Scroll animations hook inicializado');
-    
-    // Pequeño delay para asegurar que el DOM esté listo
+    let mounted = true;
     const timer = setTimeout(() => {
-      // Refresh ScrollTrigger después de que el contenido cargue
-      ScrollTrigger.refresh();
-      console.log('✅ ScrollTrigger refreshed');
+      (async () => {
+        const gsapMod = await import('gsap');
+        const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
+        const scrollMod = await import('gsap/ScrollTrigger');
+        const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+        if (mounted) {
+          gsap.registerPlugin(ScrollTrigger);
+          if (typeof ScrollTrigger.refresh === 'function') ScrollTrigger.refresh();
+        }
+      })();
     }, 500);
 
     return () => {
+      mounted = false;
       clearTimeout(timer);
     };
   }, []);

@@ -1,16 +1,15 @@
-// src/presentation/components/sections/Contact/ContactForm.tsx
 'use client';
 
 import { useContactForm } from '@/presentation/hooks/useContactForm';
 
 export default function ContactForm() {
-  const { formData, errors, status, handleChange, handleSubmit } = useContactForm();
+  const { formData, errors, status, feedbackMessage, handleChange, handleSubmit } = useContactForm();
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Name Field */}
       <div>
-        <label htmlFor="name" className="block text-sm font-semibold text-light mb-2">
+        <label htmlFor="name" className="field-label">
           Nombre *
         </label>
         <input
@@ -20,21 +19,21 @@ export default function ContactForm() {
           value={formData.name}
           onChange={handleChange}
           disabled={status === 'loading'}
-          className={`w-full px-4 py-3 bg-dark-lighter border rounded-lg text-light placeholder-light-darker focus:outline-none focus:ring-2 transition-all ${
+          className={`field-control ${
             errors.name 
-              ? 'border-red-500 focus:ring-red-500' 
-              : 'border-transparent focus:ring-primary'
+              ? 'border-red-500 focus:border-red-500 focus:shadow-[0_0_0_4px_rgba(239,68,68,0.12)]' 
+              : ''
           } disabled:opacity-50 disabled:cursor-not-allowed`}
           placeholder="Tu nombre completo"
         />
         {errors.name && (
-          <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+          <p className="mt-1 text-sm text-red-400">{errors.name}</p>
         )}
       </div>
 
       {/* Email Field */}
       <div>
-        <label htmlFor="email" className="block text-sm font-semibold text-light mb-2">
+        <label htmlFor="email" className="field-label">
           Email *
         </label>
         <input
@@ -44,21 +43,21 @@ export default function ContactForm() {
           value={formData.email}
           onChange={handleChange}
           disabled={status === 'loading'}
-          className={`w-full px-4 py-3 bg-dark-lighter border rounded-lg text-light placeholder-light-darker focus:outline-none focus:ring-2 transition-all ${
+          className={`field-control ${
             errors.email 
-              ? 'border-red-500 focus:ring-red-500' 
-              : 'border-transparent focus:ring-primary'
+              ? 'border-red-500 focus:border-red-500 focus:shadow-[0_0_0_4px_rgba(239,68,68,0.12)]' 
+              : ''
           } disabled:opacity-50 disabled:cursor-not-allowed`}
           placeholder="tu@email.com"
         />
         {errors.email && (
-          <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+          <p className="mt-1 text-sm text-red-400">{errors.email}</p>
         )}
       </div>
 
       {/* Subject Field */}
       <div>
-        <label htmlFor="subject" className="block text-sm font-semibold text-light mb-2">
+        <label htmlFor="subject" className="field-label">
           Asunto *
         </label>
         <input
@@ -68,21 +67,21 @@ export default function ContactForm() {
           value={formData.subject}
           onChange={handleChange}
           disabled={status === 'loading'}
-          className={`w-full px-4 py-3 bg-dark-lighter border rounded-lg text-light placeholder-light-darker focus:outline-none focus:ring-2 transition-all ${
+          className={`field-control ${
             errors.subject 
-              ? 'border-red-500 focus:ring-red-500' 
-              : 'border-transparent focus:ring-primary'
+              ? 'border-red-500 focus:border-red-500 focus:shadow-[0_0_0_4px_rgba(239,68,68,0.12)]' 
+              : ''
           } disabled:opacity-50 disabled:cursor-not-allowed`}
           placeholder="¿Sobre qué quieres hablar?"
         />
         {errors.subject && (
-          <p className="mt-1 text-sm text-red-500">{errors.subject}</p>
+          <p className="mt-1 text-sm text-red-400">{errors.subject}</p>
         )}
       </div>
 
       {/* Message Field */}
       <div>
-        <label htmlFor="message" className="block text-sm font-semibold text-light mb-2">
+        <label htmlFor="message" className="field-label">
           Mensaje *
         </label>
         <textarea
@@ -92,23 +91,31 @@ export default function ContactForm() {
           onChange={handleChange}
           disabled={status === 'loading'}
           rows={6}
-          className={`w-full px-4 py-3 bg-dark-lighter border rounded-lg text-light placeholder-light-darker focus:outline-none focus:ring-2 transition-all resize-none ${
+          className={`field-control resize-none ${
             errors.message 
-              ? 'border-red-500 focus:ring-red-500' 
-              : 'border-transparent focus:ring-primary'
+              ? 'border-red-500 focus:border-red-500 focus:shadow-[0_0_0_4px_rgba(239,68,68,0.12)]' 
+              : ''
           } disabled:opacity-50 disabled:cursor-not-allowed`}
           placeholder="Cuéntame sobre tu proyecto..."
         />
         {errors.message && (
-          <p className="mt-1 text-sm text-red-500">{errors.message}</p>
+          <p className="mt-1 text-sm text-red-400">{errors.message}</p>
         )}
       </div>
 
       {/* Status Messages */}
-      {status === 'success' && (
-        <div className="p-4 bg-green-500/20 border border-green-500 rounded-lg">
-          <p className="text-green-500 font-semibold">
-            ✓ ¡Mensaje enviado exitosamente! Te responderé pronto.
+      {feedbackMessage && (
+        <div
+          className={`surface-card rounded-2xl p-4 border ${
+            status === 'success'
+              ? 'border-green-500/30 bg-green-500/5'
+              : 'border-red-500/30 bg-red-500/5'
+          }`}
+          role="status"
+          aria-live="polite"
+        >
+          <p className={`font-semibold ${status === 'success' ? 'text-green-300' : 'text-red-300'}`}>
+            {feedbackMessage}
           </p>
         </div>
       )}
@@ -117,7 +124,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full px-8 py-4 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+        className="btn btn-primary w-full px-8 py-4 font-bold disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         {status === 'loading' ? (
           <span className="flex items-center justify-center gap-2">

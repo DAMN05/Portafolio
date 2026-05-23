@@ -1,15 +1,10 @@
-// src/presentation/components/sections/Projects/ProjectsSection.tsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ProjectCard from './ProjectCard';
 import ProjectModal from './ProjectModal';
 import { Project, ProjectCategory } from '@/shared/types/projects.types';
 import { PROJECTS_CONTENT, PROJECTS_DATA, PROJECT_CATEGORIES } from '@/shared/constants/projects.constants';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function ProjectsSection() {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
@@ -25,8 +20,14 @@ export default function ProjectsSection() {
     : PROJECTS_DATA.filter(project => project.category === activeCategory);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animación del título
+    let ctx: { revert: () => void } | undefined;
+    (async () => {
+      const gsapMod = await import('gsap');
+      const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
+      const scrollMod = await import('gsap/ScrollTrigger');
+      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      gsap.registerPlugin(ScrollTrigger);
+      ctx = gsap.context(() => {
       gsap.from(titleRef.current, {
         y: 50,
         opacity: 0,
@@ -38,7 +39,6 @@ export default function ProjectsSection() {
         },
       });
 
-      // Animación del subtítulo
       if (subtitleRef.current) {
         gsap.from(subtitleRef.current, {
           y: 30,
@@ -53,9 +53,7 @@ export default function ProjectsSection() {
         });
       }
 
-      // Animación de los filtros
       if (filterRef.current) {
-        // Asegurar visibilidad inicial
         gsap.set(filterRef.current.children, { opacity: 1, y: 0 });
         
         gsap.from(filterRef.current.children, {
@@ -72,9 +70,12 @@ export default function ProjectsSection() {
           },
         });
       }
-    });
+      });
+    })();
 
-    return () => ctx.revert();
+    return () => {
+      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+    };
   }, []);
 
   const handleOpenModal = (project: Project) => {
@@ -88,15 +89,18 @@ export default function ProjectsSection() {
   };
 
   return (
-    <section id="projects" className="section py-16 sm:py-20 lg:py-24 bg-dark px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="section-shell px-4 sm:px-6 lg:px-8">
       <div className="container-custom">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-12">
+          <div className="section-kicker mb-5 justify-center">
+            Proyectos
+          </div>
           <h2 ref={titleRef} className="section-title text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
             {PROJECTS_CONTENT.title}
           </h2>
           {PROJECTS_CONTENT.subtitle && (
-            <p ref={subtitleRef} className="text-base sm:text-lg text-light-darker">
+            <p ref={subtitleRef} className="section-subtitle text-base sm:text-lg">
               {PROJECTS_CONTENT.subtitle}
             </p>
           )}
@@ -110,11 +114,13 @@ export default function ProjectsSection() {
           {PROJECT_CATEGORIES.map(category => (
             <button
               key={category.id}
+              type="button"
               onClick={() => setActiveCategory(category.id as ProjectCategory)}
-              className={`px-4 py-2 sm:px-6 sm:py-2.5 rounded-lg font-semibold transition-all duration-300 text-sm sm:text-base opacity-100 ${
+              aria-pressed={activeCategory === category.id}
+              className={`btn px-4 py-2 sm:px-6 sm:py-2.5 text-sm sm:text-base opacity-100 ${
                 activeCategory === category.id
-                  ? 'bg-primary text-white scale-105'
-                  : 'bg-dark-lighter text-light-darker hover:bg-primary/20 hover:text-primary'
+                  ? 'btn-primary scale-105'
+                  : 'btn-secondary'
               }`}
               style={{ opacity: 1 }}
             >
@@ -137,8 +143,8 @@ export default function ProjectsSection() {
 
         {/* Empty State */}
         {filteredProjects.length === 0 && (
-          <div className="text-center py-16 sm:py-20">
-            <p className="text-light-darker text-base sm:text-lg">
+          <div className="surface-card card-interactive mx-auto max-w-2xl text-center py-16 sm:py-20 px-6">
+            <p className="text-[color:var(--text-muted)] text-base sm:text-lg">
               No hay proyectos en esta categoría aún.
             </p>
           </div>

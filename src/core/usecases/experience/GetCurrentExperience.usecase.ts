@@ -1,4 +1,3 @@
-// src/core/usecases/experience/GetCurrentExperience.usecase.ts
 
 import { IExperienceRepository } from '@/core/repositories';
 import { ExperienceEntity } from '@/core/entities';

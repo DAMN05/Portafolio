@@ -1,4 +1,3 @@
-// src/core/usecases/projects/GetAllProjects.usecase.ts
 
 import { IProjectRepository } from '@/core/repositories';
 import { ProjectEntity } from '@/core/entities';

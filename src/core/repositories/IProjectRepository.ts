@@ -1,4 +1,3 @@
-// src/core/repositories/IProjectRepository.ts
 
 import { ProjectEntity } from '@/core/entities';
 

@@ -1,9 +1,6 @@
-// src/presentation/components/sections/About/AboutSection.tsx
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import StatsCards from './StatsCards';
 import SkillsGrid from './SkillsGrid';
 import ExperienceTimeline from './ExperienceTimeline';
@@ -13,56 +10,66 @@ import {
   EXPERIENCE_DATA 
 } from '@/shared/constants/about.constants';
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function AboutSection() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descriptionRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animación del título
-      gsap.from(titleRef.current, {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      });
+    let ctx: { revert: () => void } | undefined;
+    (async () => {
+      const gsapMod = await import('gsap');
+      const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
+      const scrollMod = await import('gsap/ScrollTrigger');
+      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      gsap.registerPlugin(ScrollTrigger);
 
-      // Animación de las descripciones
-      descriptionRefs.current.forEach((ref, index) => {
-        if (ref) {
-          gsap.from(ref, {
-            y: 30,
-            opacity: 0,
-            duration: 0.6,
-            delay: index * 0.1,
-            scrollTrigger: {
-              trigger: ref,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-          });
-        }
-      });
-    });
+      ctx = gsap.context(() => {
+        gsap.from(titleRef.current, {
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
 
-    return () => ctx.revert();
+        descriptionRefs.current.forEach((ref, index) => {
+          if (ref) {
+            gsap.from(ref, {
+              y: 30,
+              opacity: 0,
+              duration: 0.6,
+              delay: index * 0.1,
+              scrollTrigger: {
+                trigger: ref,
+                start: 'top 80%',
+                toggleActions: 'play none none none',
+              },
+            });
+          }
+        });
+      });
+    })();
+
+    return () => {
+      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+    };
   }, []);
 
   return (
     <section 
       id="about" 
-      className="section py-16 sm:py-20 lg:py-24 bg-dark-lighter/30 px-4 sm:px-6 lg:px-8"
+      className="section-shell section-shell--alt px-4 sm:px-6 lg:px-8"
     >
       <div className="container-custom">
         {/* Header */}
         <div className="mb-12 sm:mb-16 max-w-4xl mx-auto">
+          <div className="section-kicker mb-5 justify-center">
+            Sobre mí
+          </div>
           <h2 
             ref={titleRef}
             className="section-title text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 text-center"
@@ -77,7 +84,7 @@ export default function AboutSection() {
                   ref={(el) => {
                   descriptionRefs.current[index] = el;
                   }}
-                  className="text-base sm:text-lg text-light-darker leading-relaxed text-justify"
+                  className="section-subtitle text-base sm:text-lg leading-relaxed text-justify"
               >
                 {paragraph}
               </p>

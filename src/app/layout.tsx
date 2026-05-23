@@ -1,13 +1,15 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Manrope, Syne , Space_Mono} from 'next/font/google'
 import './globals.css'
 import { SEO } from '@/shared/constants'
 import Navbar from '@/presentation/components/layout/Header/Navbar'
-import { CustomCursor } from '@/presentation/components/common/CustomCursor/CustomCursor'
 
-const inter = Inter({ subsets: ['latin'] })
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' })
+const space_mono = Space_Mono({ subsets: ['latin'],weight: ['400','700'] ,variable: '--font-space-mono' })
+const syne = Syne({ subsets: ['latin'], variable: '--font-syne' })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SEO.URL),
   title: SEO.TITLE,
   description: SEO.DESCRIPTION,
   keywords: SEO.KEYWORDS,
@@ -54,8 +56,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="scroll-smooth">
-      <body className={inter.className}>
-        <CustomCursor />
+      <body className={`${manrope.variable} ${syne.variable}`}>
         <Navbar />
         {children}
       </body>

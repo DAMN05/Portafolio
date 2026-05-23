@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { ROUTES } from '@/shared/constants'
 
 const navItems = [
   { name: 'Inicio', href: '#hero' },
@@ -16,7 +14,6 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
 
-  // Detectar scroll para cambiar estilo del navbar
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
@@ -26,7 +23,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Cerrar menú mobile al hacer scroll
   useEffect(() => {
     const handleScroll = () => {
       if (isMobileMenuOpen) {
@@ -38,7 +34,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isMobileMenuOpen])
 
-  // Detectar sección activa
   useEffect(() => {
     const sections = navItems.map(item => item.href.replace('#', ''))
     
@@ -58,7 +53,6 @@ export default function Navbar() {
         }
       }
 
-      // Si estamos en el top, marcar Hero como activo
       if (window.scrollY < 100) {
         setActiveSection('#hero')
       }
@@ -84,31 +78,34 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-dark/95 backdrop-blur-md shadow-lg py-4'
+          ? 'py-4'
           : 'bg-transparent py-6'
       }`}
     >
       <div className="container-custom">
-        <div className="flex items-center justify-between">
+        <div className={`surface-card card-interactive flex items-center justify-between px-4 py-3 ${isScrolled ? 'border border-white/10' : 'border border-transparent bg-transparent shadow-none backdrop-blur-0'}`}>
           {/* Logo */}
-          <button
+          <a
+            href="#hero"
             onClick={() => handleNavClick('#hero')}
-            className="text-2xl font-bold gradient-text hover:scale-105 transition-transform"
+            className="section-heading text-lg sm:text-2xl font-bold hover:scale-105 transition-transform"
           >
             Daniel Ramirez
-          </button>
+          </a>
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <li key={item.name}>
-                <button
+                <a
+                  href={item.href}
                   onClick={() => handleNavClick(item.href)}
-                  className={`text-lg font-medium transition-colors relative group ${
+                  className={`text-sm sm:text-base font-medium transition-colors relative group ${
                     activeSection === item.href
                       ? 'text-primary'
                       : 'text-light hover:text-primary'
                   }`}
+                  aria-current={activeSection === item.href ? 'location' : undefined}
                 >
                   {item.name}
                   {/* Underline animado */}
@@ -117,7 +114,7 @@ export default function Navbar() {
                       activeSection === item.href ? 'w-full' : 'w-0 group-hover:w-full'
                     }`}
                   />
-                </button>
+                </a>
               </li>
             ))}
           </ul>
@@ -126,20 +123,13 @@ export default function Navbar() {
           <a
             href="/Cv_DARM.pdf"
             download
-            className="hidden md:flex items-center gap-2.5 px-5 py-2.5 relative overflow-hidden group"
-            style={{
-              background: 'linear-gradient(135deg, rgba(0,212,255,0.15) 0%, rgba(139,92,246,0.15) 100%)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(0,212,255,0.3)',
-              borderRadius: '12px',
-              boxShadow: '0 4px 20px rgba(0,212,255,0.2), inset 0 1px 0 rgba(255,255,255,0.1)'
-            }}
+            className="hidden md:flex btn btn-primary items-center gap-2.5 px-5 py-2.5 relative overflow-hidden group"
           >
             {/* Animated gradient overlay */}
             <div 
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               style={{
-                background: 'linear-gradient(135deg, rgba(0,212,255,0.25) 0%, rgba(139,92,246,0.25) 100%)'
+                background: 'linear-gradient(135deg, rgba(125,211,252,0.25) 0%, rgba(245,158,11,0.25) 100%)'
               }}
             />
             
@@ -161,7 +151,7 @@ export default function Navbar() {
             </div>
             
             {/* Text with gradient on hover */}
-            <span className="relative z-10 font-bold text-[15px] bg-gradient-to-r from-white to-white group-hover:from-primary group-hover:to-secondary bg-clip-text group-hover:text-transparent transition-all duration-300">
+            <span className="relative z-10 font-bold text-[15px] transition-all duration-300">
               Descargar CV
             </span>
 
@@ -169,7 +159,7 @@ export default function Navbar() {
             <div 
               className="absolute inset-0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10"
               style={{
-                background: 'radial-gradient(circle, rgba(0,212,255,0.4) 0%, transparent 70%)'
+                background: 'radial-gradient(circle, rgba(125,211,252,0.4) 0%, transparent 70%)'
               }}
             />
           </a>
@@ -179,6 +169,8 @@ export default function Navbar() {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden w-10 h-10 flex flex-col items-center justify-center space-y-1.5 focus:outline-none"
             aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-menu"
           >
             <span
               className={`block w-6 h-0.5 bg-light transition-all duration-300 ${
@@ -200,23 +192,26 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-300 bg-dark/98 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 ${
+          id="mobile-nav-menu"
+          className={`md:hidden overflow-hidden transition-all duration-300 rounded-2xl shadow-2xl border border-white/10 ${
             isMobileMenuOpen ? 'max-h-96 opacity-100 mt-6' : 'max-h-0 opacity-0'
           }`}
         >
           <ul className="flex flex-col space-y-4 py-4">
             {navItems.map((item) => (
               <li key={item.name}>
-                <button
+                <a
+                  href={item.href}
                   onClick={() => handleNavClick(item.href)}
                   className={`text-lg font-medium w-full text-left px-4 py-2 rounded-lg transition-colors ${
                     activeSection === item.href
                       ? 'text-primary bg-primary/10'
                       : 'text-light hover:text-primary hover:bg-primary/5'
                   }`}
+                  aria-current={activeSection === item.href ? 'location' : undefined}
                 >
                   {item.name}
-                </button>
+                </a>
               </li>
             ))}
             {/* CTA Button Mobile */}
@@ -224,20 +219,13 @@ export default function Navbar() {
               <a
                 href="/Cv_DARM.pdf"
                 download
-                className="flex items-center justify-center gap-3 w-full px-6 py-3.5 relative overflow-hidden group"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(0,212,255,0.15) 0%, rgba(139,92,246,0.15) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(0,212,255,0.3)',
-                  borderRadius: '14px',
-                  boxShadow: '0 4px 20px rgba(0,212,255,0.2), inset 0 1px 0 rgba(255,255,255,0.1)'
-                }}
+                className="btn btn-primary flex items-center justify-center gap-3 w-full px-6 py-3.5 relative overflow-hidden group"
               >
                 {/* Animated gradient overlay */}
                 <div 
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(0,212,255,0.25) 0%, rgba(139,92,246,0.25) 100%)'
+                    background: 'linear-gradient(135deg, rgba(125,211,252,0.25) 0%, rgba(245,158,11,0.25) 100%)'
                   }}
                 />
                 
@@ -267,7 +255,7 @@ export default function Navbar() {
                 <div 
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10"
                   style={{
-                    background: 'radial-gradient(circle, rgba(0,212,255,0.4) 0%, transparent 70%)'
+                    background: 'radial-gradient(circle, rgba(125,211,252,0.4) 0%, transparent 70%)'
                   }}
                 />
               </a>

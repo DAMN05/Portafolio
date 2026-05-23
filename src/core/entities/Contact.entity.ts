@@ -1,4 +1,3 @@
-// src/core/entities/Contact.entity.ts
 
 export class ContactMessageEntity {
   constructor(
@@ -10,7 +9,6 @@ export class ContactMessageEntity {
     public readonly createdAt: Date = new Date(),
     public readonly status: 'pending' | 'sent' | 'failed' = 'pending'
   ) {
-    // Validaciones básicas
     this.validateEmail(email);
     this.validateName(name);
     this.validateMessage(message);

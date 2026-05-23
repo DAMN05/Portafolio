@@ -1,4 +1,3 @@
-// src/infrastructure/repositories/index.ts
 
 export { ProjectRepository } from './ProjectRepository';
 export { SkillRepository } from './SkillRepository';

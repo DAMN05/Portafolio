@@ -1,5 +1,3 @@
-// src/shared/constants/projects.constants.ts
-
 import { Project, ProjectsContent } from '@/shared/types/projects.types';
 
 export const PROJECTS_CONTENT: ProjectsContent = {
@@ -31,8 +29,6 @@ export const PROJECTS_DATA: Project[] = [
       '/images/projects/OMI/omi4.png',
     ],
     thumbnail: '/images/projects/OMI/omi.png',
-   //githubUrl: '',
-  //liveUrl: '',
   featured: true,
   completedAt: '2024-12',
   highlights: [
@@ -64,11 +60,9 @@ export const PROJECTS_DATA: Project[] = [
   images: [
     '/images/projects/PORTF/INICIO.png',
     '/images/projects/PORTF/AM.png',
-    '/images/projects/PORTF/portfolio3.png'
+    '/images/projects/PORTF/AM.png'
   ],
   thumbnail: '/images/projects/PORTF/INICIO.png',
-  //githubUrl: ''
-  //liveUrl: '',
   featured: false,
   completedAt: '2025-01',
   highlights: [
@@ -104,8 +98,6 @@ export const PROJECTS_DATA: Project[] = [
       '/images/projects/CHECK/CREAR.png'
     ],
     thumbnail: '/images/projects/CHECK/KANBAN.png',
-   // githubUrl: '',
-    //liveUrl: '',
     featured: false,
     completedAt: '2025-01',
     highlights: [
@@ -154,8 +146,6 @@ SVT resuelve problemas comunes en la gestión de inventarios como errores manual
 
   thumbnail: '/images/projects/SVT/Inventario.png',
 
-  //githubUrl: '',
-  //liveUrl: '',
   featured: true,
   completedAt: '2025-04',
 
@@ -212,8 +202,6 @@ El proyecto se desarrolla mediante metodologías ágiles con sprints quincenales
 
   thumbnail: '/images/projects/ET/interfaz.png',
 
-  //githubUrl: '',
-  //liveUrl: '',
   featured: true,
   completedAt: '2025-12',
 
@@ -272,8 +260,6 @@ frontend–backend, despliegue en la web, gestión de datos y diseño visual.
 
   thumbnail: '/images/projects/NEXUN/INICIO.png',
 
-  //githubUrl: '',
-  //liveUrl: ',
   featured: true,
   completedAt: '2025-02',
 

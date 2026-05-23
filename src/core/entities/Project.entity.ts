@@ -1,4 +1,3 @@
-// src/core/entities/Project.entity.ts
 
 export type ProjectCategory = 'all' | 'web' | '3d' | 'mobile' | 'fullstack';
 

@@ -1,4 +1,3 @@
-// src/core/usecases/skills/GetAllSkills.usecase.ts
 
 import { ISkillRepository } from '@/core/repositories';
 import { SkillEntity } from '@/core/entities';

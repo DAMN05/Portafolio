@@ -1,142 +1,135 @@
-# 🚀 Portfolio Personal - Daniel Ramirez
+# Daniel Ramirez — Portfolio
 
-Portafolio web moderno y minimalista desarrollado con Next.js, React, TypeScript y Three.js. Presenta una experiencia interactiva en 3D con animaciones fluidas y diseño responsive.
+## Resumen
+Soy Daniel Ramírez, desarrollador con 2 años enfocado en Frontend —
+Next.js, TypeScript y todo lo que hace que una interfaz se sienta bien.
+Puedo moverme al stack completo cuando el proyecto lo pide.
 
-## ✨ Características
+Busco un equipo donde pueda aportar desde el día uno y seguir creciendo.
+Remoto o presencial, rol Frontend o FullStack — estoy disponible y con
+ganas. Lo que ves acá es trabajo real, sin relleno.
 
-- 🎨 **Diseño Moderno**: Interfaz limpia con efectos glassmorphism y gradientes
-- 🎭 **Avatar 3D Interactivo**: Modelo Ready Player Me con tracking de mouse
-- 🌟 **Partículas de Skills**: Sistema de partículas 3D mostrando tecnologías
-- ⌨️ **Animación Typing**: Efecto de escritura en el título principal con loop
-- 📱 **100% Responsive**: Optimizado para todos los dispositivos
-- 🎬 **Animaciones GSAP**: Transiciones suaves con ScrollTrigger
-- 🎯 **Clean Architecture**: Código organizado y mantenible
-- 🔥 **Performance Optimizada**: SSG y optimización de assets
+![Vercel](https://img.shields.io/badge/deploy-vercel-black) ![Lint](https://img.shields.io/badge/lint-eslint-brightgreen)
 
-## 🛠️ Tecnologías
 
-### Frontend
-- **Framework**: Next.js 16.0.1 con App Router
-- **Lenguaje**: TypeScript
-- **Estilos**: Tailwind CSS
-- **Animaciones**: GSAP + ScrollTrigger
-- **3D**: Three.js, @react-three/fiber, @react-three/drei
 
-### Herramientas
-- **Control de Versiones**: Git
-- **Package Manager**: npm
-- **Linting**: ESLint
-- **Deployment**: Vercel
+## Stack y librerías clave
+- Framework: Next.js (App Router)
+- Lenguaje: TypeScript
+- Estilos: Tailwind CSS
+- Animaciones: GSAP (+ ScrollTrigger)
+- Form & Email: EmailJS (`@emailjs/browser`)
+- Íconos: `react-icons`
+- Linter: ESLint
 
-## 🚀 Instalación y Uso
+**Quick Links**
+- **Environment variables:** [.env.local](.env.local#L1-L3)
+- **Email config:** [src/shared/constants/contact.constants.ts](src/shared/constants/contact.constants.ts#L33-L39)
+- **Contact send logic:** [src/infrastructure/repositories/ContactRepository.ts](src/infrastructure/repositories/ContactRepository.ts#L1-L60)
+- **Vercel configuration:** [vercel.json](vercel.json#L1-L4)
+- **Ignored files:** [.gitignore](.gitignore#L1-L20)
 
-### Requisitos Previos
-- Node.js 18+ 
-- npm o yarn
+**Table of Contents**
+- Project summary
+- Requirements
+- Getting started (development)
+- Build & production
+- Environment variables
+- Project structure
+- Important implementation notes
+- Deployment
+- Maintenance & contribution
 
-### Instalación
+**Project summary**
+- Next.js application using the App Router and TypeScript. The codebase follows a clean architecture separation (core, infrastructure, presentation, shared).
 
-```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/portfolio.git
+**Requirements**
+- Node.js 18+ (recommended)
+- npm 9+ or compatible
 
-# Navegar al directorio
-cd portfolio
+**Getting started (development)**
+- Clone the repository and install dependencies:
 
-# Instalar dependencias
-npm install
+  ```bash
+  git clone <repo-url>
+  cd portfolio
+  npm ci
+  ```
 
-# Configurar variables de entorno
-cp .env.example .env.local
-# Editar .env.local con tus credenciales
-```
+- Create local environment variables (example file is provided in the repo):
 
-### Desarrollo
+  ```bash
+  cp .env.example .env.local
+  # Edit .env.local with your values
+  ```
 
-```bash
-# Iniciar servidor de desarrollo
-npm run dev
+- Run the development server:
 
-# Abrir http://localhost:3000
-```
+  ```bash
+  npm run dev
+  # Open http://localhost:3000
+  ```
 
-### Producción
+**Build & production**
+- Create a production build and run locally:
 
-```bash
-# Crear build de producción
-npm run build
+  ```bash
+  npm run build
+  npm start
+  ```
 
-# Iniciar servidor de producción
-npm start
-```
+**Environment variables**
+- Store secrets and configuration only in environment variables. Example variables used by this project:
 
-## 📁 Estructura del Proyecto
+  ```env
+  NEXT_PUBLIC_EMAILJS_SERVICE_ID=
+  NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=
+  NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=
+  ```
 
-```
-portfolio/
-├── src/
-│   ├── app/                    # App Router de Next.js
-│   ├── core/                   # Lógica de negocio
-│   │   ├── entities/           # Entidades del dominio
-│   │   ├── repositories/       # Interfaces de repositorios
-│   │   └── usecases/           # Casos de uso
-│   ├── infrastructure/         # Implementaciones
-│   │   ├── di/                 # Dependency Injection
-│   │   └── repositories/       # Implementación de repos
-│   ├── presentation/           # Componentes UI
-│   │   ├── components/         # Componentes React
-│   │   │   ├── 3d/             # Componentes Three.js
-│   │   │   ├── common/         # Componentes reutilizables
-│   │   │   ├── layout/         # Layout components
-│   │   │   └── sections/       # Secciones de la página
-│   │   └── hooks/              # Custom React hooks
-│   └── shared/                 # Código compartido
-│       ├── constants/          # Constantes y configuración
-│       ├── types/              # Tipos TypeScript
-│       └── utils/              # Utilidades
-└── public/                     # Assets estáticos
-```
+- Notes:
+  - Variables prefixed with `NEXT_PUBLIC_` are exposed to client-side code — only place values there that are intended to be public. See [src/shared/constants/contact.constants.ts](src/shared/constants/contact.constants.ts#L33-L39).
+  - For server-only secrets, use variables without the `NEXT_PUBLIC_` prefix and consume them in server-side code or API routes.
 
-## 🎨 Secciones
+**Project structure (high level)**
+- `src/app/` — Next.js App Router pages and layouts.
+- `src/core/` — Domain entities, repository interfaces and use-cases.
+- `src/infrastructure/` — Implementations (DI container and repository implementations). See [src/infrastructure/di/container.ts](src/infrastructure/di/container.ts#L1-L40).
+- `src/presentation/` — React components and hooks used by the UI.
+- `src/shared/` — Shared constants, types and utilities.
+- `public/` — Static assets.
 
-1. **Hero**: Avatar 3D interactivo con partículas de skills
-2. **About**: Información personal, skills y experiencia
-3. **Projects**: Galería de proyectos con modal detallado
-4. **Contact**: Formulario de contacto con EmailJS
+**Important implementation notes**
+- Contact form: client-side flow uses `@emailjs/browser` and reads configuration from environment variables via [src/shared/constants/contact.constants.ts](src/shared/constants/contact.constants.ts#L33-L39). The send behavior is implemented in [src/infrastructure/repositories/ContactRepository.ts](src/infrastructure/repositories/ContactRepository.ts#L1-L60). Review these files when changing contact behavior.
+- Logging: avoid logging PII in production. The repository contains guards to prevent email send attempts when variables are not configured.
+- `.env.local` is ignored by default via [.gitignore](.gitignore#L1-L20); do not commit secrets.
 
-## 🌐 Deploy
+**Deployment**
+- The project is configured for Vercel. The `vercel.json` file contains the build and install commands: [vercel.json](vercel.json#L1-L4).
+- Recommended steps for production deploy:
+  1. Add project to Vercel and connect the Git repository.
+  2. Add required environment variables in Vercel UI (do not commit them to git).
+  3. Set up branch protection and require status checks before merging.
 
-El proyecto está optimizado para deploy en Vercel:
+**Maintenance & contribution**
+- Formatting & linting:
 
-1. Conecta tu repositorio de GitHub a Vercel
-2. Configura las variables de entorno
-3. Deploy automático en cada push a main
+  - Lint with `npm run lint`.
 
-## 📝 Variables de Entorno
+- Local cleanup:
 
-```env
-# EmailJS Configuration
-NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
-NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
-```
+  - The repo includes a `scripts/` helper directory; add it to `.gitignore` if you don't want to publish helper scripts (already ignored in this workspace).
 
-## 📄 Licencia
+- Removing sensitive artifacts:
 
-Este proyecto es de código abierto y está disponible bajo la licencia MIT.
+  - If a secret was accidentally committed, rotate the key immediately and remove it from git history (tools: `git filter-repo`, `BFG`). Contact team members before rewriting history.
 
-## 👤 Autor
+**Troubleshooting**
+- Build errors: verify Node.js version and run `npm ci` to install dependencies.
+- Missing env vars: the app will generally log warnings if required env vars for third-party services are missing; ensure variables are present in the environment before running production builds.
 
-**Daniel Ramirez**
-- GitHub: [@DAMN05](https://github.com/DAMN05)
-- LinkedIn:(https://www.linkedin.com/in/daniel-rmdev/)
+## Contacto
+- Daniel Ramirez — GitHub: https://github.com/DAMN05 — LinkedIn: https://www.linkedin.com/in/daniel-rmdev/
 
 ---
 
-⭐ Si te gusta este proyecto, ¡dale una estrella en GitHub!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

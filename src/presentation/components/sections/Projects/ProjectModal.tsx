@@ -1,8 +1,6 @@
-// src/presentation/components/sections/Projects/ProjectModal.tsx
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Project } from '@/shared/types/projects.types';
 import Image from 'next/image';
 
@@ -15,25 +13,61 @@ interface ProjectModalProps {
 export default function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousActiveElementRef = useRef<HTMLElement | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
+  const handleClose = useCallback(() => {
+    if (modalRef.current && overlayRef.current) {
+      (async () => {
+        const gsapMod = await import('gsap');
+        const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
+        const tl = gsap.timeline();
+        tl.to(modalRef.current, {
+          y: 30,
+          scale: 0.95,
+          opacity: 0,
+          duration: 0.3,
+          ease: 'power2.in',
+        })
+        .to(overlayRef.current, {
+          opacity: 0,
+          duration: 0.2,
+          onComplete: onClose,
+        }, '-=0.1');
+      })();
+    }
+  }, [onClose]);
+
   useEffect(() => {
+    let tl: GSAPTimeline | undefined;
     if (isOpen && modalRef.current && overlayRef.current) {
+      previousActiveElementRef.current = document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
       document.body.style.overflow = 'hidden';
 
-      const tl = gsap.timeline();
-      tl.to(overlayRef.current, {
-        opacity: 1,
-        duration: 0.3,
-        ease: 'power2.out',
-      })
-      .from(modalRef.current, {
-        y: 50,
-        scale: 0.95,
-        opacity: 0,
-        duration: 0.5,
-        ease: 'power3.out',
-      }, '-=0.15');
+      (async () => {
+        const gsapMod = await import('gsap');
+        const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
+        tl = gsap.timeline();
+        tl.to(overlayRef.current, {
+          opacity: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        })
+        .from(modalRef.current, {
+          y: 50,
+          scale: 0.95,
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power3.out',
+        }, '-=0.15');
+
+        requestAnimationFrame(() => {
+          closeButtonRef.current?.focus();
+        });
+      })();
     } else {
       document.body.style.overflow = 'unset';
       setActiveImageIndex(0);
@@ -41,6 +75,8 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
 
     return () => {
       document.body.style.overflow = 'unset';
+      if (tl && typeof tl.kill === 'function') tl.kill();
+      previousActiveElementRef.current?.focus();
     };
   }, [isOpen]);
 
@@ -53,25 +89,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen]);
-
-  const handleClose = () => {
-    if (modalRef.current && overlayRef.current) {
-      const tl = gsap.timeline();
-      tl.to(modalRef.current, {
-        y: 30,
-        scale: 0.95,
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power2.in',
-      })
-      .to(overlayRef.current, {
-        opacity: 0,
-        duration: 0.2,
-        onComplete: onClose,
-      }, '-=0.1');
-    }
-  };
+  }, [handleClose, isOpen]);
 
   if (!isOpen || !project) return null;
 
@@ -90,18 +108,23 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark/95 backdrop-blur-sm opacity-0"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[rgba(6,10,18,0.92)] backdrop-blur-xl opacity-0"
       onClick={handleClose}
     >
       <div
         ref={modalRef}
-        className="relative max-w-5xl w-full max-h-[90vh] overflow-hidden glass rounded-3xl shadow-2xl"
+        className="surface-card relative max-w-5xl w-full max-h-[90vh] overflow-hidden rounded-[2rem] shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-modal-title"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
+          ref={closeButtonRef}
           onClick={handleClose}
-          className="absolute top-6 right-6 z-20 w-12 h-12 flex items-center justify-center bg-dark/90 hover:bg-primary border border-light/10 hover:border-primary rounded-full transition-all duration-300 group"
+          type="button"
+          className="absolute top-6 right-6 z-20 w-12 h-12 flex items-center justify-center rounded-full border border-white/10 bg-[rgba(6,10,18,0.9)] transition-all duration-300 group hover:border-primary hover:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
           aria-label="Cerrar modal"
         >
           <svg 
@@ -123,7 +146,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
           <div className="relative w-full h-80 md:h-96 bg-gradient-to-br from-primary/10 via-secondary/5 to-dark overflow-hidden">
             {project.featured && (
               <div className="absolute top-6 left-6 z-10">
-                <span className="px-4 py-2 bg-gradient-to-r from-accent to-accent/80 text-dark text-sm font-bold rounded-full shadow-lg backdrop-blur-sm flex items-center gap-2">
+                 <span className="badge badge-accent text-sm font-bold flex items-center gap-2">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
@@ -190,19 +213,19 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
           {/* Content */}
           <div className="p-6 md:p-10">
             {/* Title */}
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-light via-primary to-secondary bg-clip-text text-transparent">
+            <h2 id="project-modal-title" className="section-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-light via-primary to-secondary bg-clip-text text-transparent">
               {project.title}
             </h2>
 
             {/* Category & Date */}
             <div className="flex flex-wrap gap-3 mb-8">
-              <span className="px-4 py-2 bg-gradient-to-r from-primary/20 to-primary/10 text-primary rounded-full font-semibold text-sm border border-primary/20 flex items-center gap-2">
+               <span className="badge badge-accent flex items-center gap-2 text-sm">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 0v8h12V6H4zm2 3a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1z" />
                 </svg>
                 {project.category}
               </span>
-              <span className="px-4 py-2 bg-dark/30 text-light-darker rounded-full text-sm border border-light/10 flex items-center gap-2">
+               <span className="badge flex items-center gap-2 text-sm">
                 <svg className="w-4 h-4" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                   <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -212,11 +235,11 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
 
             {/* Description */}
             <div className="mb-8">
-              <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
+               <h3 className="section-heading text-xl font-bold mb-3 flex items-center gap-2">
                 <div className="w-1 h-6 bg-gradient-to-b from-primary to-secondary rounded-full" />
                 Descripción
               </h3>
-              <p className="text-light-darker text-base md:text-lg leading-relaxed">
+               <p className="section-subtitle text-base md:text-lg leading-relaxed">
                 {project.longDescription}
               </p>
             </div>
@@ -224,7 +247,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
             {/* Highlights */}
             {project.highlights && project.highlights.length > 0 && (
               <div className="mb-8">
-                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                 <h3 className="section-heading text-xl font-bold mb-4 flex items-center gap-2">
                   <div className="w-1 h-6 bg-gradient-to-b from-primary to-secondary rounded-full" />
                   Características Destacadas
                 </h3>
@@ -239,7 +262,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                           <path d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span className="text-light-darker">{highlight}</span>
+                       <span className="text-[color:var(--text-muted)]">{highlight}</span>
                     </div>
                   ))}
                 </div>
@@ -248,7 +271,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
 
             {/* Technologies */}
             <div className="mb-8">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+               <h3 className="section-heading text-xl font-bold mb-4 flex items-center gap-2">
                 <div className="w-1 h-6 bg-gradient-to-b from-primary to-secondary rounded-full" />
                 Stack Tecnológico
               </h3>
@@ -256,7 +279,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                 {project.technologies.map((tech, index) => (
                   <span
                     key={index}
-                    className="px-4 py-2 bg-gradient-to-br from-primary/10 to-secondary/10 text-primary rounded-lg font-semibold text-sm border border-primary/20 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 cursor-default"
+                     className="badge badge-accent cursor-default text-sm"
                   >
                     {tech}
                   </span>
