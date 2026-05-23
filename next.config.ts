@@ -23,6 +23,26 @@ const nextConfig: NextConfig = {
     return config;
   },
   reactStrictMode: false,
+  async headers() {
+    return [
+      {
+        // Apply a relaxed CSP to allow serving fonts from Vercel blob storage
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value:
+              "default-src 'self'; " +
+              "font-src 'self' *.vercel.com *.gstatic.com vercel.live *.public.blob.vercel-storage.com; " +
+              "img-src 'self' data: https:; " +
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; " +
+              "style-src 'self' 'unsafe-inline' https:; " +
+              "connect-src 'self' https: wss:;"
+          }
+        ]
+      }
+    ];
+  }
 }
 
 export default nextConfig
