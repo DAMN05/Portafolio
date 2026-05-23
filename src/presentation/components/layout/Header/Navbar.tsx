@@ -1,6 +1,7 @@
-'use client'
+"use client"
 
 import { useState, useEffect } from 'react'
+import { CONTACT_INFO } from '@/shared/constants/contact.constants'
 
 const navItems = [
   { name: 'Inicio', href: '#hero' },
@@ -121,7 +122,7 @@ export default function Navbar() {
 
           {/* CTA Button Desktop */}
           <a
-            href="/Cv_DARM.pdf"
+            href={CONTACT_INFO.cvUrl}
             download
             className="hidden md:flex btn btn-primary items-center gap-2.5 px-5 py-2.5 relative overflow-hidden group"
           >
@@ -217,7 +218,7 @@ export default function Navbar() {
             {/* CTA Button Mobile */}
             <li className="px-4 pt-4">
               <a
-                href="/Cv_DARM.pdf"
+                href={CONTACT_INFO.cvUrl}
                 download
                 className="btn btn-primary flex items-center justify-center gap-3 w-full px-6 py-3.5 relative overflow-hidden group"
               >

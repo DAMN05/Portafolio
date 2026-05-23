@@ -27,7 +27,7 @@ export const CONTACT_INFO = {
   email: 'danielmaigual00@gmail.com',
   location: 'Sabaneta, Colombia',
   availability: 'Disponible para proyectos',
-  cvUrl: '/Cv_DARM.pdf'
+  cvUrl: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/Cv_DARM.pdf`
 };
 
 export const EMAILJS_CONFIG = {
