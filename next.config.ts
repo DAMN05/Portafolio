@@ -33,7 +33,7 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value:
               "default-src 'self'; " +
-              "font-src 'self' *.vercel.com *.gstatic.com vercel.live *.public.blob.vercel-storage.com; " +
+              "font-src 'self' https://k2mkucxia43oc7fa.public.blob.vercel-storage.com *.vercel.com *.gstatic.com vercel.live https://*.public.blob.vercel-storage.com; " +
               "img-src 'self' data: https:; " +
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; " +
               "style-src 'self' 'unsafe-inline' https:; " +
