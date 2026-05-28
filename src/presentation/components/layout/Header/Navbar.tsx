@@ -194,7 +194,7 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <div
           id="mobile-nav-menu"
-          className={`md:hidden overflow-hidden transition-all duration-300 rounded-2xl shadow-2xl border border-white/10 ${
+          className={`md:hidden surface-card card-interactive overflow-hidden transition-all duration-300 rounded-2xl ${
             isMobileMenuOpen ? 'max-h-96 opacity-100 mt-6' : 'max-h-0 opacity-0'
           }`}
         >
