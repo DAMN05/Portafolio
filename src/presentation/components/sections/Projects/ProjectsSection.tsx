@@ -1,80 +1,86 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import ProjectCard from './ProjectCard';
-import ProjectModal from './ProjectModal';
-import { Project, ProjectCategory } from '@/shared/types/projects.types';
-import { PROJECTS_CONTENT, PROJECTS_DATA, PROJECT_CATEGORIES } from '@/shared/constants/projects.constants';
+import { useState, useEffect, useRef } from "react";
+import ProjectCard from "./ProjectCard";
+import ProjectModal from "./ProjectModal";
+import { Project, ProjectCategory } from "@/shared/types/projects.types";
+import {
+  PROJECTS_CONTENT,
+  PROJECTS_DATA,
+  PROJECT_CATEGORIES,
+} from "@/shared/constants/projects.constants";
 
 export default function ProjectsSection() {
-  const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
+  const [activeCategory, setActiveCategory] = useState<ProjectCategory>("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
 
-  const filteredProjects = activeCategory === 'all'
-    ? PROJECTS_DATA
-    : PROJECTS_DATA.filter(project => project.category === activeCategory);
+  const filteredProjects =
+    activeCategory === "all"
+      ? PROJECTS_DATA
+      : PROJECTS_DATA.filter((project) => project.category === activeCategory);
 
   useEffect(() => {
     let ctx: { revert: () => void } | undefined;
     (async () => {
-      const gsapMod = await import('gsap');
+      const gsapMod = await import("gsap");
       const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
-      const scrollMod = await import('gsap/ScrollTrigger');
-      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      const scrollMod = await import("gsap/ScrollTrigger");
+      const ScrollTrigger =
+        scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
       gsap.registerPlugin(ScrollTrigger);
       ctx = gsap.context(() => {
-      gsap.from(titleRef.current, {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      });
-
-      if (subtitleRef.current) {
-        gsap.from(subtitleRef.current, {
-          y: 30,
+        gsap.from(titleRef.current, {
+          y: 50,
           opacity: 0,
-          duration: 0.6,
-          delay: 0.2,
+          duration: 0.8,
           scrollTrigger: {
-            trigger: subtitleRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            trigger: titleRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         });
-      }
 
-      if (filterRef.current) {
-        gsap.set(filterRef.current.children, { opacity: 1, y: 0 });
-        
-        gsap.from(filterRef.current.children, {
-          y: 20,
-          opacity: 0,
-          duration: 0.5,
-          stagger: 0.1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: filterRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-            once: true, // Solo animar una vez
-          },
-        });
-      }
+        if (subtitleRef.current) {
+          gsap.from(subtitleRef.current, {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            delay: 0.2,
+            scrollTrigger: {
+              trigger: subtitleRef.current,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          });
+        }
+
+        if (filterRef.current) {
+          gsap.set(filterRef.current.children, { opacity: 1, y: 0 });
+
+          gsap.from(filterRef.current.children, {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: filterRef.current,
+              start: "top 80%",
+              toggleActions: "play none none none",
+              once: true, // Solo animar una vez
+            },
+          });
+        }
       });
     })();
 
     return () => {
-      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+      if (ctx && typeof ctx.revert === "function") ctx.revert();
     };
   }, []);
 
@@ -93,14 +99,18 @@ export default function ProjectsSection() {
       <div className="container-custom">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-12">
-          <div className="section-kicker mb-5 justify-center">
-            Proyectos
-          </div>
-          <h2 ref={titleRef} className="section-title text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
+          <div className="section-kicker mb-5 justify-center">Proyectos</div>
+          <h2
+            ref={titleRef}
+            className="section-title text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4"
+          >
             {PROJECTS_CONTENT.title}
           </h2>
           {PROJECTS_CONTENT.subtitle && (
-            <p ref={subtitleRef} className="section-subtitle text-base sm:text-lg">
+            <p
+              ref={subtitleRef}
+              className="section-subtitle text-base sm:text-lg"
+            >
               {PROJECTS_CONTENT.subtitle}
             </p>
           )}
@@ -111,7 +121,7 @@ export default function ProjectsSection() {
           ref={filterRef}
           className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 sm:mb-12"
         >
-          {PROJECT_CATEGORIES.map(category => (
+          {PROJECT_CATEGORIES.map((category) => (
             <button
               key={category.id}
               type="button"
@@ -119,8 +129,8 @@ export default function ProjectsSection() {
               aria-pressed={activeCategory === category.id}
               className={`btn px-4 py-2 sm:px-6 sm:py-2.5 text-sm sm:text-base opacity-100 ${
                 activeCategory === category.id
-                  ? 'btn-primary scale-105'
-                  : 'btn-secondary'
+                  ? "btn-primary scale-105"
+                  : "btn-secondary"
               }`}
               style={{ opacity: 1 }}
             >
