@@ -1,6 +1,5 @@
-
-import { ISocialLinkRepository } from '@/core/repositories';
-import { SocialLinkEntity } from '@/core/entities';
+import { ISocialLinkRepository } from "@/core/repositories";
+import { SocialLinkEntity } from "@/core/entities";
 
 export class GetAllSocialLinksUseCase {
   constructor(private socialLinkRepository: ISocialLinkRepository) {}

@@ -1,5 +1,4 @@
-
-import { ExperienceEntity } from '@/core/entities';
+import { ExperienceEntity } from "@/core/entities";
 
 export interface IExperienceRepository {
   /**
@@ -20,7 +19,9 @@ export interface IExperienceRepository {
   /**
    * Obtiene experiencias por tipo
    */
-  getByType(type: 'work' | 'education' | 'freelance'): Promise<ExperienceEntity[]>;
+  getByType(
+    type: "work" | "education" | "freelance",
+  ): Promise<ExperienceEntity[]>;
 
   /**
    * Obtiene experiencias ordenadas cronológicamente

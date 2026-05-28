@@ -1,5 +1,4 @@
-
-export type ExperienceType = 'work' | 'education' | 'freelance';
+export type ExperienceType = "work" | "education" | "freelance";
 
 export class ExperienceEntity {
   constructor(
@@ -13,7 +12,7 @@ export class ExperienceEntity {
     public readonly isCurrent: boolean,
     public readonly description: string,
     public readonly achievements: string[] = [],
-    public readonly technologies: string[] = []
+    public readonly technologies: string[] = [],
   ) {}
 
   /**
@@ -21,11 +20,16 @@ export class ExperienceEntity {
    */
   get durationInMonths(): number {
     const start = new Date(this.startDate);
-    const end = this.isCurrent ? new Date() : (this.endDate ? new Date(this.endDate) : new Date());
-    
-    const months = (end.getFullYear() - start.getFullYear()) * 12 + 
-                   (end.getMonth() - start.getMonth());
-    
+    const end = this.isCurrent
+      ? new Date()
+      : this.endDate
+        ? new Date(this.endDate)
+        : new Date();
+
+    const months =
+      (end.getFullYear() - start.getFullYear()) * 12 +
+      (end.getMonth() - start.getMonth());
+
     return months;
   }
 
@@ -38,11 +42,11 @@ export class ExperienceEntity {
     const remainingMonths = months % 12;
 
     if (years === 0) {
-      return `${remainingMonths} ${remainingMonths === 1 ? 'mes' : 'meses'}`;
+      return `${remainingMonths} ${remainingMonths === 1 ? "mes" : "meses"}`;
     } else if (remainingMonths === 0) {
-      return `${years} ${years === 1 ? 'año' : 'años'}`;
+      return `${years} ${years === 1 ? "año" : "años"}`;
     } else {
-      return `${years} ${years === 1 ? 'año' : 'años'} y ${remainingMonths} ${remainingMonths === 1 ? 'mes' : 'meses'}`;
+      return `${years} ${years === 1 ? "año" : "años"} y ${remainingMonths} ${remainingMonths === 1 ? "mes" : "meses"}`;
     }
   }
 
@@ -51,9 +55,9 @@ export class ExperienceEntity {
    */
   get dateRange(): string {
     const startDate = new Date(this.startDate);
-    const startFormatted = startDate.toLocaleDateString('es-ES', { 
-      year: 'numeric', 
-      month: 'short' 
+    const startFormatted = startDate.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "short",
     });
 
     if (this.isCurrent) {
@@ -65,9 +69,9 @@ export class ExperienceEntity {
     }
 
     const endDate = new Date(this.endDate);
-    const endFormatted = endDate.toLocaleDateString('es-ES', { 
-      year: 'numeric', 
-      month: 'short' 
+    const endFormatted = endDate.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "short",
     });
 
     return `${startFormatted} - ${endFormatted}`;
@@ -93,9 +97,9 @@ export class ExperienceEntity {
    */
   get typeLabel(): string {
     const labels: Record<ExperienceType, string> = {
-      work: 'Trabajo',
-      education: 'Educación',
-      freelance: 'Freelance'
+      work: "Trabajo",
+      education: "Educación",
+      freelance: "Freelance",
     };
     return labels[this.type];
   }
@@ -105,9 +109,9 @@ export class ExperienceEntity {
    */
   getTypeColor(): string {
     const colors: Record<ExperienceType, string> = {
-      work: '#3B82F6',
-      education: '#8B5CF6',
-      freelance: '#10B981'
+      work: "#3B82F6",
+      education: "#8B5CF6",
+      freelance: "#10B981",
     };
     return colors[this.type];
   }

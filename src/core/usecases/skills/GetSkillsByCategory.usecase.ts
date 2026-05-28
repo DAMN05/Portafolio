@@ -1,6 +1,5 @@
-
-import { ISkillRepository } from '@/core/repositories';
-import { SkillEntity } from '@/core/entities';
+import { ISkillRepository } from "@/core/repositories";
+import { SkillEntity } from "@/core/entities";
 
 export class GetSkillsByCategoryUseCase {
   constructor(private skillRepository: ISkillRepository) {}

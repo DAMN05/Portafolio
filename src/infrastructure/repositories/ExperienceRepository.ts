@@ -1,7 +1,7 @@
-import { IExperienceRepository } from '@/core/repositories';
-import { ExperienceEntity } from '@/core/entities';
-import { EXPERIENCE_DATA } from '@/shared/constants/about.constants';
-import { Experience } from '@/shared/types/about.types';
+import { IExperienceRepository } from "@/core/repositories";
+import { ExperienceEntity } from "@/core/entities";
+import { EXPERIENCE_DATA } from "@/shared/constants/about.constants";
+import { Experience } from "@/shared/types/about.types";
 
 export class ExperienceRepository implements IExperienceRepository {
   /**
@@ -19,28 +19,30 @@ export class ExperienceRepository implements IExperienceRepository {
       data.isCurrent,
       data.description,
       data.achievements || [],
-      data.technologies || []
+      data.technologies || [],
     );
   }
 
   async getAll(): Promise<ExperienceEntity[]> {
-    return EXPERIENCE_DATA.map(e => this.toEntity(e));
+    return EXPERIENCE_DATA.map((e) => this.toEntity(e));
   }
 
   async getById(id: string): Promise<ExperienceEntity | null> {
-    const experience = EXPERIENCE_DATA.find(e => e.id === id);
+    const experience = EXPERIENCE_DATA.find((e) => e.id === id);
     return experience ? this.toEntity(experience) : null;
   }
 
   async getCurrent(): Promise<ExperienceEntity | null> {
-    const current = EXPERIENCE_DATA.find(e => e.isCurrent);
+    const current = EXPERIENCE_DATA.find((e) => e.isCurrent);
     return current ? this.toEntity(current) : null;
   }
 
-  async getByType(type: 'work' | 'education' | 'freelance'): Promise<ExperienceEntity[]> {
-    return EXPERIENCE_DATA
-      .filter(e => e.type === type)
-      .map(e => this.toEntity(e));
+  async getByType(
+    type: "work" | "education" | "freelance",
+  ): Promise<ExperienceEntity[]> {
+    return EXPERIENCE_DATA.filter((e) => e.type === type).map((e) =>
+      this.toEntity(e),
+    );
   }
 
   async getChronological(): Promise<ExperienceEntity[]> {

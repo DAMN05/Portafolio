@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import ContactForm from './ContactForm';
-import SocialLinks from './SocialLinks';
-import { CONTACT_CONTENT } from '@/shared/constants/contact.constants';
+import { useEffect, useRef } from "react";
+import ContactForm from "./ContactForm";
+import SocialLinks from "./SocialLinks";
+import { CONTACT_CONTENT } from "@/shared/constants/contact.constants";
 
 export default function ContactSection() {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -12,10 +12,11 @@ export default function ContactSection() {
   useEffect(() => {
     let ctx: { revert: () => void } | undefined;
     (async () => {
-      const gsapMod = await import('gsap');
+      const gsapMod = await import("gsap");
       const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
-      const scrollMod = await import('gsap/ScrollTrigger');
-      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      const scrollMod = await import("gsap/ScrollTrigger");
+      const ScrollTrigger =
+        scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
       gsap.registerPlugin(ScrollTrigger);
 
       ctx = gsap.context(() => {
@@ -25,8 +26,8 @@ export default function ContactSection() {
           duration: 0.8,
           scrollTrigger: {
             trigger: titleRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         });
 
@@ -37,33 +38,34 @@ export default function ContactSection() {
           delay: 0.2,
           scrollTrigger: {
             trigger: subtitleRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         });
       });
     })();
 
     return () => {
-      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+      if (ctx && typeof ctx.revert === "function") ctx.revert();
     };
   }, []);
 
   return (
-    <section id="contact" className="section-shell section-shell--alt px-4 sm:px-6 lg:px-8">
+    <section
+      id="contact"
+      className="section-shell section-shell--alt px-4 sm:px-6 lg:px-8"
+    >
       <div className="container-custom">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16 max-w-3xl mx-auto">
-          <div className="section-kicker mb-5 justify-center">
-            Contacto
-          </div>
-          <h2 
+          <div className="section-kicker mb-5 justify-center">Contacto</div>
+          <h2
             ref={titleRef}
             className="section-title text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6"
           >
             {CONTACT_CONTENT.title}
           </h2>
-          <p 
+          <p
             ref={subtitleRef}
             className="section-subtitle text-base sm:text-lg"
           >
@@ -76,7 +78,9 @@ export default function ContactSection() {
           {/* Form - Takes 3 columns */}
           <div className="lg:col-span-3">
             <div className="surface-card card-interactive rounded-[2rem] p-6 sm:p-8">
-              <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{CONTACT_CONTENT.formTitle}</h3>
+              <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+                {CONTACT_CONTENT.formTitle}
+              </h3>
               <ContactForm />
             </div>
           </div>

@@ -1,6 +1,5 @@
-
-import { IExperienceRepository } from '@/core/repositories';
-import { ExperienceEntity } from '@/core/entities';
+import { IExperienceRepository } from "@/core/repositories";
+import { ExperienceEntity } from "@/core/entities";
 
 export class GetAllExperiencesUseCase {
   constructor(private experienceRepository: IExperienceRepository) {}

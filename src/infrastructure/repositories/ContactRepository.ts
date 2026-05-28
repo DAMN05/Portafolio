@@ -1,8 +1,7 @@
-
-import { IContactRepository } from '@/core/repositories';
-import { ContactMessageEntity } from '@/core/entities';
-import emailjs from '@emailjs/browser';
-import { EMAILJS_CONFIG } from '@/shared/constants/contact.constants';
+import { IContactRepository } from "@/core/repositories";
+import { ContactMessageEntity } from "@/core/entities";
+import emailjs from "@emailjs/browser";
+import { EMAILJS_CONFIG } from "@/shared/constants/contact.constants";
 
 interface StoredContactMessage {
   id: string;
@@ -11,7 +10,7 @@ interface StoredContactMessage {
   subject: string;
   message: string;
   createdAt: string;
-  status: ContactMessageEntity['status'];
+  status: ContactMessageEntity["status"];
 }
 
 export class ContactRepository implements IContactRepository {
@@ -21,16 +20,22 @@ export class ContactRepository implements IContactRepository {
   async send(message: ContactMessageEntity): Promise<boolean> {
     try {
       if (!message.name || !message.email) {
-        throw new Error(`Datos faltantes: name=${message.name}, email=${message.email}`);
+        throw new Error(
+          `Datos faltantes: name=${message.name}, email=${message.email}`,
+        );
       }
-      
-      console.debug('Enviando mensaje de contacto');
 
-      if (!EMAILJS_CONFIG.serviceId || !EMAILJS_CONFIG.templateId || !EMAILJS_CONFIG.publicKey) {
-        console.warn('EmailJS no configurado — omitiendo envío');
+      console.debug("Enviando mensaje de contacto");
+
+      if (
+        !EMAILJS_CONFIG.serviceId ||
+        !EMAILJS_CONFIG.templateId ||
+        !EMAILJS_CONFIG.publicKey
+      ) {
+        console.warn("EmailJS no configurado — omitiendo envío");
         return false;
       }
-      
+
       await emailjs.send(
         EMAILJS_CONFIG.serviceId,
         EMAILJS_CONFIG.templateId,
@@ -38,13 +43,13 @@ export class ContactRepository implements IContactRepository {
           name: message.name, // Cambiado de from_name a name
           email: message.email, // Cambiado de from_email a email
           subject: message.subject,
-          message: message.message
+          message: message.message,
         },
-        EMAILJS_CONFIG.publicKey
+        EMAILJS_CONFIG.publicKey,
       );
       return true;
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       return false;
     }
   }
@@ -56,22 +61,25 @@ export class ContactRepository implements IContactRepository {
     try {
       const messages = await this.getAll();
       messages.push(message);
-      
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('contact_messages', JSON.stringify(
-          messages.map(m => ({
-            id: m.id,
-            name: m.name,
-            email: m.email,
-            subject: m.subject,
-            message: m.message,
-            createdAt: m.createdAt.toISOString(),
-            status: m.status
-          }))
-        ));
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem(
+          "contact_messages",
+          JSON.stringify(
+            messages.map((m) => ({
+              id: m.id,
+              name: m.name,
+              email: m.email,
+              subject: m.subject,
+              message: m.message,
+              createdAt: m.createdAt.toISOString(),
+              status: m.status,
+            })),
+          ),
+        );
       }
     } catch (error) {
-      console.error('Error saving message:', error);
+      console.error("Error saving message:", error);
     }
   }
 
@@ -80,9 +88,9 @@ export class ContactRepository implements IContactRepository {
    */
   async getAll(): Promise<ContactMessageEntity[]> {
     try {
-      if (typeof window === 'undefined') return [];
-      
-      const stored = localStorage.getItem('contact_messages');
+      if (typeof window === "undefined") return [];
+
+      const stored = localStorage.getItem("contact_messages");
       if (!stored) return [];
 
       const data: unknown = JSON.parse(stored);
@@ -98,11 +106,11 @@ export class ContactRepository implements IContactRepository {
           message.subject,
           message.message,
           new Date(message.createdAt),
-          message.status
+          message.status,
         );
       });
     } catch (error) {
-      console.error('Error getting messages:', error);
+      console.error("Error getting messages:", error);
       return [];
     }
   }

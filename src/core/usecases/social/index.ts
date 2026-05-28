@@ -1,2 +1,1 @@
-
-export { GetAllSocialLinksUseCase } from './GetAllSocialLinks.usecase';
+export { GetAllSocialLinksUseCase } from "./GetAllSocialLinks.usecase";

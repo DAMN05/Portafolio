@@ -1,2 +1,1 @@
-
-export { SendContactMessageUseCase } from './SendContactMessage.usecase';
+export { SendContactMessageUseCase } from "./SendContactMessage.usecase";

@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Stat } from '@/shared/types/about.types';
-
+import { useEffect, useRef, useState } from "react";
+import { Stat } from "@/shared/types/about.types";
 
 interface StatsCardsProps {
   stats: Stat[];
@@ -16,10 +15,11 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
     const target = parseInt(stat.value);
     let ctx: { revert: () => void } | undefined;
     (async () => {
-      const gsapMod = await import('gsap');
+      const gsapMod = await import("gsap");
       const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
-      const scrollMod = await import('gsap/ScrollTrigger');
-      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      const scrollMod = await import("gsap/ScrollTrigger");
+      const ScrollTrigger =
+        scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
       gsap.registerPlugin(ScrollTrigger);
 
       ctx = gsap.context(() => {
@@ -30,8 +30,8 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
           delay: index * 0.1,
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         });
 
@@ -41,11 +41,11 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
           val: target,
           duration: 2,
           delay: index * 0.1,
-          ease: 'power2.out',
+          ease: "power2.out",
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
           onUpdate: () => {
             setCount(Math.round(counter.val));
@@ -55,7 +55,7 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
     })();
 
     return () => {
-      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+      if (ctx && typeof ctx.revert === "function") ctx.revert();
     };
   }, [stat.value, index]);
 
@@ -65,7 +65,8 @@ function StatCard({ stat, index }: { stat: Stat; index: number }) {
       className="surface-card card-interactive rounded-2xl p-6 sm:p-8 text-center"
     >
       <div className="section-heading text-4xl sm:text-5xl md:text-6xl font-bold gradient-text mb-2">
-        {count}{stat.suffix}
+        {count}
+        {stat.suffix}
       </div>
       <div className="text-[color:var(--text-muted)] text-xs sm:text-sm md:text-base">
         {stat.label}

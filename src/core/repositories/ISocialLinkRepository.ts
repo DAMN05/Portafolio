@@ -1,5 +1,4 @@
-
-import { SocialLinkEntity } from '@/core/entities';
+import { SocialLinkEntity } from "@/core/entities";
 
 export interface ISocialLinkRepository {
   /**

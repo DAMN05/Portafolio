@@ -1,15 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Experience } from '@/shared/types/about.types';
-
+import { useEffect, useRef, useState } from "react";
+import { Experience } from "@/shared/types/about.types";
 
 interface ExperienceTimelineProps {
   experiences: Experience[];
 }
 
-function TimelineItem({ experience, index, isLast }: { 
-  experience: Experience; 
+function TimelineItem({
+  experience,
+  index,
+  isLast,
+}: {
+  experience: Experience;
   index: number;
   isLast: boolean;
 }) {
@@ -24,10 +27,11 @@ function TimelineItem({ experience, index, isLast }: {
   useEffect(() => {
     let ctx: { revert: () => void } | undefined;
     (async () => {
-      const gsapMod = await import('gsap');
+      const gsapMod = await import("gsap");
       const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
-      const scrollMod = await import('gsap/ScrollTrigger');
-      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      const scrollMod = await import("gsap/ScrollTrigger");
+      const ScrollTrigger =
+        scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
       gsap.registerPlugin(ScrollTrigger);
 
       ctx = gsap.context(() => {
@@ -37,8 +41,8 @@ function TimelineItem({ experience, index, isLast }: {
           duration: 0.6,
           scrollTrigger: {
             trigger: itemRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         });
 
@@ -48,8 +52,8 @@ function TimelineItem({ experience, index, isLast }: {
           delay: 0.3,
           scrollTrigger: {
             trigger: dotRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         });
 
@@ -58,11 +62,11 @@ function TimelineItem({ experience, index, isLast }: {
             scaleY: 0,
             duration: 0.6,
             delay: 0.4,
-            transformOrigin: 'top',
+            transformOrigin: "top",
             scrollTrigger: {
               trigger: lineRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
+              start: "top 80%",
+              toggleActions: "play none none none",
             },
           });
         }
@@ -70,13 +74,22 @@ function TimelineItem({ experience, index, isLast }: {
     })();
 
     return () => {
-      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+      if (ctx && typeof ctx.revert === "function") ctx.revert();
     };
   }, [index, isLast]);
 
-  const formatDate = (date: string) => {
-    const d = new Date(date);
-    return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
+  const formatDate = (date?: string) => {
+    if (!date) return "";
+    const normalize = (d: string) => d.trim().replace(/\.+$/g, "");
+    const toDate = (d: string) => {
+      const clean = normalize(d);
+      const ym = /^\d{4}-\d{2}$/;
+      const parsed = ym.test(clean) ? new Date(clean + "-01") : new Date(clean);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    };
+    const parsed = toDate(date);
+    if (!parsed) return "";
+    return parsed.toLocaleDateString("es-ES", { year: "numeric", month: "short" });
   };
 
   return (
@@ -86,8 +99,8 @@ function TimelineItem({ experience, index, isLast }: {
         <div
           ref={dotRef}
           className={`w-3 h-3 md:w-4 md:h-4 rounded-full ${
-            experience.isCurrent ? 'bg-primary' : 'bg-secondary'
-            } z-10 ring-4 ring-[rgba(6,10,18,0.9)]`}
+            experience.isCurrent ? "bg-primary" : "bg-secondary"
+          } z-10 ring-4 ring-[rgba(6,10,18,0.9)]`}
         />
         {!isLast && (
           <div
@@ -101,31 +114,35 @@ function TimelineItem({ experience, index, isLast }: {
       <div
         ref={itemRef}
         className={`flex items-start mb-8 md:mb-12 ${
-          index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+          index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
         }`}
       >
         {/* Espaciado para mobile */}
         <div className="w-12 md:hidden" />
-        
+
         {/* Card container - Siempre alineado a la izquierda */}
-        <div className={`
+        <div
+          className={`
           flex-1 md:w-5/12 md:flex-none
-          ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}
-        `}>
+          ${index % 2 === 0 ? "md:pr-8" : "md:pl-8"}
+        `}
+        >
           <div className="surface-card card-interactive rounded-2xl p-5 sm:p-6">
             {/* Header con título y badge */}
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <h4 className="section-heading text-lg sm:text-xl font-bold text-white flex-1">{experience.title}</h4>
+              <h4 className="section-heading text-lg sm:text-xl font-bold text-white flex-1">
+                {experience.title}
+              </h4>
               {experience.isCurrent && (
-                <span className="badge badge-accent text-xs">
-                  ✨ Actual
-                </span>
+                <span className="badge badge-accent text-xs">✨ Actual</span>
               )}
             </div>
-            
+
             {/* Empresa, ubicación y fechas en una línea */}
             <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-[color:var(--text-muted)] mb-4">
-              <span className="text-primary font-semibold">{experience.company}</span>
+              <span className="text-primary font-semibold">
+                {experience.company}
+              </span>
               {experience.location && (
                 <>
                   <span>•</span>
@@ -133,7 +150,14 @@ function TimelineItem({ experience, index, isLast }: {
                 </>
               )}
               <span>•</span>
-              <span>📅 {formatDate(experience.startDate)} - {experience.isCurrent ? 'Presente' : formatDate(experience.endDate!)}</span>
+              <span>
+                📅 {formatDate(experience.startDate)} - {" "}
+                {experience.isCurrent
+                  ? "Presente"
+                  : experience.endDate
+                  ? formatDate(experience.endDate)
+                  : ""}
+              </span>
             </div>
 
             {/* Descripción - más corta y concisa */}
@@ -146,7 +170,10 @@ function TimelineItem({ experience, index, isLast }: {
               <div className="mb-4 p-3 bg-primary/5 rounded-lg border border-primary/10">
                 <div className="flex flex-wrap gap-2">
                   {experience.highlights.slice(0, 4).map((highlight, i) => (
-                    <span key={i} className="text-xs text-[color:var(--text-muted)] flex items-center gap-1.5">
+                    <span
+                      key={i}
+                      className="text-xs text-[color:var(--text-muted)] flex items-center gap-1.5"
+                    >
                       <span className="text-primary">✓</span>
                       <span>{highlight}</span>
                     </span>
@@ -158,11 +185,21 @@ function TimelineItem({ experience, index, isLast }: {
             {/* Logros - Expandible */}
             {experience.achievements && experience.achievements.length > 0 && (
               <div className="mb-4">
-                <h5 className="text-xs font-semibold text-white uppercase tracking-wide mb-2">Responsabilidades clave</h5>
-                <ul id={achievementsId} className="text-xs sm:text-sm text-[color:var(--text-muted)] space-y-1.5">
-                  {(showAllAchievements ? experience.achievements : experience.achievements.slice(0, 3)).map((achievement, i) => (
+                <h5 className="text-xs font-semibold text-white uppercase tracking-wide mb-2">
+                  Responsabilidades clave
+                </h5>
+                <ul
+                  id={achievementsId}
+                  className="text-xs sm:text-sm text-[color:var(--text-muted)] space-y-1.5"
+                >
+                  {(showAllAchievements
+                    ? experience.achievements
+                    : experience.achievements.slice(0, 3)
+                  ).map((achievement, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5 flex-shrink-0">▸</span>
+                      <span className="text-primary mt-0.5 flex-shrink-0">
+                        ▸
+                      </span>
                       <span className="flex-1">{achievement}</span>
                     </li>
                   ))}
@@ -183,7 +220,9 @@ function TimelineItem({ experience, index, isLast }: {
                     ) : (
                       <>
                         <span>▼</span>
-                        <span>Ver {experience.achievements.length - 3} más</span>
+                        <span>
+                          Ver {experience.achievements.length - 3} más
+                        </span>
                       </>
                     )}
                   </button>
@@ -195,11 +234,11 @@ function TimelineItem({ experience, index, isLast }: {
             {experience.technologies && experience.technologies.length > 0 && (
               <div>
                 <div id={technologiesId} className="flex flex-wrap gap-1.5">
-                  {(showAllTechnologies ? experience.technologies : experience.technologies.slice(0, 6)).map((tech, i) => (
-                    <span
-                      key={i}
-                      className="badge text-xs"
-                    >
+                  {(showAllTechnologies
+                    ? experience.technologies
+                    : experience.technologies.slice(0, 6)
+                  ).map((tech, i) => (
+                    <span key={i} className="badge text-xs">
                       {tech}
                     </span>
                   ))}
@@ -220,7 +259,10 @@ function TimelineItem({ experience, index, isLast }: {
                     ) : (
                       <>
                         <span>▼</span>
-                        <span>Ver {experience.technologies.length - 6} tecnologías más</span>
+                        <span>
+                          Ver {experience.technologies.length - 6} tecnologías
+                          más
+                        </span>
                       </>
                     )}
                   </button>
@@ -229,7 +271,7 @@ function TimelineItem({ experience, index, isLast }: {
             )}
           </div>
         </div>
-        
+
         {/* Espaciadores para desktop */}
         <div className="hidden md:block md:w-2/12" />
         <div className="hidden md:block md:w-5/12" />
@@ -238,16 +280,19 @@ function TimelineItem({ experience, index, isLast }: {
   );
 }
 
-export default function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
+export default function ExperienceTimeline({
+  experiences,
+}: ExperienceTimelineProps) {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     let ctx: { revert: () => void } | undefined;
     (async () => {
-      const gsapMod = await import('gsap');
+      const gsapMod = await import("gsap");
       const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
-      const scrollMod = await import('gsap/ScrollTrigger');
-      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      const scrollMod = await import("gsap/ScrollTrigger");
+      const ScrollTrigger =
+        scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
       gsap.registerPlugin(ScrollTrigger);
       ctx = gsap.context(() => {
         gsap.from(titleRef.current, {
@@ -256,21 +301,21 @@ export default function ExperienceTimeline({ experiences }: ExperienceTimelinePr
           duration: 0.6,
           scrollTrigger: {
             trigger: titleRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         });
       }, titleRef);
     })();
 
     return () => {
-      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+      if (ctx && typeof ctx.revert === "function") ctx.revert();
     };
   }, []);
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h3 
+      <h3
         ref={titleRef}
         className="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-12 sm:mb-16"
       >
