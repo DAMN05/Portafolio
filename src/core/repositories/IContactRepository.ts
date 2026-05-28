@@ -1,5 +1,4 @@
-
-import { ContactMessageEntity } from '@/core/entities';
+import { ContactMessageEntity } from "@/core/entities";
 
 export interface IContactRepository {
   /**

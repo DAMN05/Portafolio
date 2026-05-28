@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface UseTypingEffectOptions {
   text: string;
@@ -10,16 +10,16 @@ interface UseTypingEffectOptions {
   loop?: boolean;
 }
 
-export const useTypingEffect = ({ 
-  text, 
-  speed = 50, 
+export const useTypingEffect = ({
+  text,
+  speed = 50,
   delay = 0,
   pauseBeforeDelete = 2000,
   deleteSpeed = 30,
   pauseBeforeRestart = 500,
-  loop = true
+  loop = true,
 }: UseTypingEffectOptions) => {
-  const [displayText, setDisplayText] = useState('');
+  const [displayText, setDisplayText] = useState("");
   const [isComplete, setIsComplete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -36,7 +36,7 @@ export const useTypingEffect = ({
         } else {
           clearInterval(intervalId);
           setIsComplete(true);
-          
+
           if (loop) {
             timeoutId = setTimeout(() => {
               startDeleting();
@@ -49,17 +49,17 @@ export const useTypingEffect = ({
     const startDeleting = () => {
       setIsDeleting(true);
       currentIndex = text.length;
-      
+
       intervalId = setInterval(() => {
         if (currentIndex > 1) {
           setDisplayText(text.slice(0, currentIndex));
           currentIndex--;
         } else {
           clearInterval(intervalId);
-          setDisplayText('\u00A0'); // Espacio no rompible para mantener altura
+          setDisplayText("\u00A0"); // Espacio no rompible para mantener altura
           setIsDeleting(false);
           setIsComplete(false);
-          
+
           timeoutId = setTimeout(() => {
             currentIndex = 0;
             startTyping();
@@ -78,7 +78,15 @@ export const useTypingEffect = ({
       clearTimeout(timeoutId);
       clearInterval(intervalId);
     };
-  }, [text, speed, delay, pauseBeforeDelete, deleteSpeed, pauseBeforeRestart, loop]);
+  }, [
+    text,
+    speed,
+    delay,
+    pauseBeforeDelete,
+    deleteSpeed,
+    pauseBeforeRestart,
+    loop,
+  ]);
 
   return { displayText, isComplete, isDeleting };
 };

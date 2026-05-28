@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { useEffect, useRef } from 'react';
-import { useTypingEffect } from '@/presentation/hooks/useTypingEffect';
-import { 
-  HERO_CONTENT,  
-  HERO_STATS, 
-  HERO_ANIMATION_CONFIG
-} from '@/shared/constants/hero.constants';
+import Image from "next/image";
+import { useEffect, useRef } from "react";
+import { useTypingEffect } from "@/presentation/hooks/useTypingEffect";
+import {
+  HERO_CONTENT,
+  HERO_STATS,
+  HERO_ANIMATION_CONFIG,
+} from "@/shared/constants/hero.constants";
 
 export const HeroSection = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -16,57 +16,58 @@ export const HeroSection = () => {
   const buttonsRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
 
-  const { displayText: typedTitle, isComplete: titleComplete } = useTypingEffect({
-    text: HERO_CONTENT.title,
-    speed: 80,
-    delay: 500,
-  });
+  const { displayText: typedTitle, isComplete: titleComplete } =
+    useTypingEffect({
+      text: HERO_CONTENT.title,
+      speed: 80,
+      delay: 500,
+    });
 
   useEffect(() => {
     let tl: GSAPTimeline | undefined;
     (async () => {
-      const gsapMod = await import('gsap');
+      const gsapMod = await import("gsap");
       const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
       tl = gsap.timeline({ delay: HERO_ANIMATION_CONFIG.delay });
       tl.fromTo(
         titleRef.current,
         { y: 80, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+        { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
       )
         .fromTo(
           subtitleRef.current,
           { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-          '-=0.6'
+          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
+          "-=0.6",
         )
         .fromTo(
           descriptionRef.current,
           { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-          '-=0.5'
+          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
+          "-=0.5",
         )
         .fromTo(
           buttonsRef.current,
           { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
-          '-=0.4'
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+          "-=0.4",
         )
         .fromTo(
           statsRef.current,
           { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
-          '-=0.3'
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
+          "-=0.3",
         );
     })();
 
     return () => {
-      if (tl && typeof tl.kill === 'function') tl.kill();
+      if (tl && typeof tl.kill === "function") tl.kill();
     };
   }, []);
 
   return (
-    <section 
-      id="hero" 
+    <section
+      id="hero"
       className="hero-shell relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8"
     >
       <div className="container-custom relative z-10 py-24 sm:py-28 lg:py-32">
@@ -88,7 +89,10 @@ export const HeroSection = () => {
           <div className="space-y-6 sm:space-y-8 text-center lg:text-left max-w-3xl lg:max-w-none">
             {/* Título principal con efecto typing */}
             <div className="space-y-3 sm:space-y-4">
-              <h1 ref={titleRef} className="section-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              <h1
+                ref={titleRef}
+                className="section-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight"
+              >
                 <span className="text-white">
                   {typedTitle}
                   {!titleComplete && (
@@ -96,18 +100,27 @@ export const HeroSection = () => {
                   )}
                 </span>
               </h1>
-              <h2 ref={subtitleRef} className="text-balance text-xl sm:text-2xl md:text-3xl font-semibold leading-snug text-[color:var(--text-muted)]">
+              <h2
+                ref={subtitleRef}
+                className="text-balance text-xl sm:text-2xl md:text-3xl font-semibold leading-snug text-[color:var(--text-muted)]"
+              >
                 {HERO_CONTENT.subtitle}
               </h2>
             </div>
 
             {/* Descripción */}
-            <p ref={descriptionRef} className="section-subtitle text-base sm:text-lg max-w-xl leading-relaxed mx-auto lg:mx-0">
+            <p
+              ref={descriptionRef}
+              className="section-subtitle text-base sm:text-lg max-w-xl leading-relaxed mx-auto lg:mx-0"
+            >
               {HERO_CONTENT.description}
             </p>
 
             {/* CTAs - Modernos y con jerarquía clara */}
-              <div ref={buttonsRef} className="flex flex-col lg:flex-row flex-wrap gap-4 sm:gap-5 items-center lg:items-start justify-center lg:justify-start">
+            <div
+              ref={buttonsRef}
+              className="flex flex-col lg:flex-row flex-wrap gap-4 sm:gap-5 items-center lg:items-start justify-center lg:justify-start"
+            >
               {/* CTA Primario - Máxima jerarquía con efectos visuales */}
               <a
                 href={HERO_CONTENT.primaryCTA.href}
@@ -124,7 +137,12 @@ export const HeroSection = () => {
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
                   </svg>
                 </span>
               </a>
@@ -144,19 +162,28 @@ export const HeroSection = () => {
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
                   </svg>
                 </span>
               </a>
             </div>
 
             {/* Stats rápidos - Diseño moderno con cards */}
-            <div ref={statsRef} className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 lg:gap-6 pt-8 sm:pt-10">
+            <div
+              ref={statsRef}
+              className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 lg:gap-6 pt-8 sm:pt-10"
+            >
               {HERO_STATS.map((stat, index) => (
-                <div key={index} className="surface-card card-interactive flex flex-col items-center lg:items-start min-w-[100px] sm:min-w-[140px] lg:min-w-[160px] p-3 sm:p-4 lg:p-5 rounded-2xl text-center lg:text-left">
-                  <div className="badge-pill mb-2 text-white">
-                    {stat.value}
-                  </div>
+                <div
+                  key={index}
+                  className="surface-card card-interactive flex flex-col items-center lg:items-start min-w-[100px] sm:min-w-[140px] lg:min-w-[160px] p-3 sm:p-4 lg:p-5 rounded-2xl text-center lg:text-left"
+                >
+                  <div className="badge-pill mb-2 text-white">{stat.value}</div>
                   <div className="text-[11px] sm:text-xs lg:text-sm text-[color:var(--text-muted)] font-medium">
                     {stat.label}
                   </div>

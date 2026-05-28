@@ -1,4 +1,3 @@
-
 export class SocialLinkEntity {
   constructor(
     public readonly id: string,
@@ -6,7 +5,7 @@ export class SocialLinkEntity {
     public readonly url: string,
     public readonly icon: string,
     public readonly color: string,
-    public readonly username?: string
+    public readonly username?: string,
   ) {
     this.validateUrl(url);
   }
@@ -18,7 +17,7 @@ export class SocialLinkEntity {
     try {
       new URL(url);
     } catch {
-      throw new Error('Invalid URL format');
+      throw new Error("Invalid URL format");
     }
   }
 
@@ -26,14 +25,14 @@ export class SocialLinkEntity {
    * Verifica si es un link de email
    */
   get isEmail(): boolean {
-    return this.url.startsWith('mailto:');
+    return this.url.startsWith("mailto:");
   }
 
   /**
    * Verifica si es un link de teléfono
    */
   get isPhone(): boolean {
-    return this.url.startsWith('tel:');
+    return this.url.startsWith("tel:");
   }
 
   /**
@@ -43,7 +42,7 @@ export class SocialLinkEntity {
     if (this.isEmail || this.isPhone) return null;
     try {
       const urlObj = new URL(this.url);
-      return urlObj.hostname.replace('www.', '');
+      return urlObj.hostname.replace("www.", "");
     } catch {
       return null;
     }
@@ -59,14 +58,14 @@ export class SocialLinkEntity {
   /**
    * Obtiene el atributo target apropiado
    */
-  get targetAttribute(): '_blank' | '_self' {
-    return this.shouldOpenInNewTab ? '_blank' : '_self';
+  get targetAttribute(): "_blank" | "_self" {
+    return this.shouldOpenInNewTab ? "_blank" : "_self";
   }
 
   /**
    * Obtiene los atributos rel apropiados para enlaces externos
    */
   get relAttribute(): string {
-    return this.shouldOpenInNewTab ? 'noopener noreferrer' : '';
+    return this.shouldOpenInNewTab ? "noopener noreferrer" : "";
   }
 }

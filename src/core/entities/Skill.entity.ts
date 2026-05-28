@@ -1,6 +1,5 @@
-
-export type SkillCategory = 'frontend' | 'backend' | '3d' | 'tools' | 'other';
-export type SkillLevel = 'Básico' | 'Intermedio' | 'Avanzado' | 'Experto';
+export type SkillCategory = "frontend" | "backend" | "3d" | "tools" | "other";
+export type SkillLevel = "Básico" | "Intermedio" | "Avanzado" | "Experto";
 
 export class SkillEntity {
   constructor(
@@ -11,7 +10,7 @@ export class SkillEntity {
     public readonly description: string,
     public readonly color: string,
     public readonly yearsOfExperience?: string,
-    public readonly icon?: string
+    public readonly icon?: string,
   ) {}
 
   /**
@@ -19,10 +18,10 @@ export class SkillEntity {
    */
   get levelBadgeColor(): string {
     const colors: Record<SkillLevel, string> = {
-      'Básico': 'bg-gray-500/20 text-gray-300',
-      'Intermedio': 'bg-blue-500/20 text-blue-300',
-      'Avanzado': 'bg-green-500/20 text-green-300',
-      'Experto': 'bg-amber-500/20 text-amber-300'
+      Básico: "bg-gray-500/20 text-gray-300",
+      Intermedio: "bg-blue-500/20 text-blue-300",
+      Avanzado: "bg-green-500/20 text-green-300",
+      Experto: "bg-amber-500/20 text-amber-300",
     };
     return colors[this.level];
   }
@@ -31,14 +30,14 @@ export class SkillEntity {
    * Verifica si la habilidad es de nivel experto
    */
   get isExpert(): boolean {
-    return this.level === 'Experto';
+    return this.level === "Experto";
   }
 
   /**
    * Verifica si la habilidad es de nivel avanzado o superior
    */
   get isAdvanced(): boolean {
-    return this.level === 'Avanzado' || this.level === 'Experto';
+    return this.level === "Avanzado" || this.level === "Experto";
   }
 
   /**
@@ -46,11 +45,11 @@ export class SkillEntity {
    */
   getCategoryLabel(): string {
     const labels: Record<SkillCategory, string> = {
-      frontend: 'Frontend',
-      backend: 'Backend',
-      '3d': '3D/WebGL',
-      tools: 'Herramientas',
-      other: 'Otros'
+      frontend: "Frontend",
+      backend: "Backend",
+      "3d": "3D/WebGL",
+      tools: "Herramientas",
+      other: "Otros",
     };
     return labels[this.category];
   }

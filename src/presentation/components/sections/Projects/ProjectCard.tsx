@@ -1,14 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { Project } from '@/shared/types/projects.types';
-import Image from 'next/image';
+import { useEffect, useRef } from "react";
+import { Project } from "@/shared/types/projects.types";
+import Image from "next/image";
 
-
-const CATEGORY_LABELS: Record<Project['category'], string> = {
-  all: 'Todos',
-  '3d': '3D',
-  fullstack: 'Full Stack',
+const CATEGORY_LABELS: Record<Project["category"], string> = {
+  all: "Todos",
+  "3d": "3D",
+  fullstack: "Full Stack",
 };
 
 interface ProjectCardProps {
@@ -17,23 +16,32 @@ interface ProjectCardProps {
   onOpenModal: (project: Project) => void;
 }
 
-export default function ProjectCard({ project, index, onOpenModal }: ProjectCardProps) {
+export default function ProjectCard({
+  project,
+  index,
+  onOpenModal,
+}: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       if (cardRef.current) {
-        cardRef.current.style.opacity = '1';
-        cardRef.current.style.transform = 'none';
+        cardRef.current.style.opacity = "1";
+        cardRef.current.style.transform = "none";
       }
       return;
     }
     let ctx: { revert: () => void } | undefined;
     (async () => {
-      const gsapMod = await import('gsap');
+      const gsapMod = await import("gsap");
       const gsap = gsapMod.gsap || gsapMod.default || gsapMod;
-      const scrollMod = await import('gsap/ScrollTrigger');
-      const ScrollTrigger = scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
+      const scrollMod = await import("gsap/ScrollTrigger");
+      const ScrollTrigger =
+        scrollMod.ScrollTrigger || scrollMod.default || scrollMod;
       gsap.registerPlugin(ScrollTrigger);
       ctx = gsap.context(() => {
         gsap.from(cardRef.current, {
@@ -43,15 +51,15 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
           delay: index * 0.1,
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
+            start: "top 85%",
+            toggleActions: "play none none none",
           },
         });
       }, cardRef);
     })();
 
     return () => {
-      if (ctx && typeof ctx.revert === 'function') ctx.revert();
+      if (ctx && typeof ctx.revert === "function") ctx.revert();
     };
   }, [index]);
 
@@ -66,7 +74,9 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
       <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/10 bg-[linear-gradient(135deg,rgba(125,211,252,0.16),rgba(245,158,11,0.08))]">
         <div className="absolute left-4 top-4 z-10 flex items-center gap-2">
           <span className="badge">{CATEGORY_LABELS[project.category]}</span>
-          {project.featured && <span className="badge badge-accent">Destacado</span>}
+          {project.featured && (
+            <span className="badge badge-accent">Destacado</span>
+          )}
         </div>
 
         <Image
@@ -96,7 +106,10 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
       {/* Content */}
       <div className="flex flex-1 flex-col gap-5 p-6 sm:p-7">
         <div className="space-y-2">
-          <h3 id={`project-${project.id}-title`} className="section-heading text-xl font-semibold tracking-tight text-white sm:text-[1.35rem]">
+          <h3
+            id={`project-${project.id}-title`}
+            className="section-heading text-xl font-semibold tracking-tight text-white sm:text-[1.35rem]"
+          >
             {project.title}
           </h3>
 
@@ -107,7 +120,9 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
 
         <div className="flex flex-wrap gap-2">
           {project.technologies.map((tech, i) => (
-            <span key={i} className="badge">{tech}</span>
+            <span key={i} className="badge">
+              {tech}
+            </span>
           ))}
         </div>
 
@@ -124,7 +139,12 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
               Demo
             </a>
           ) : (
-            <button disabled className="btn btn-ghost w-full cursor-not-allowed opacity-50">Demo</button>
+            <button
+              disabled
+              className="btn btn-ghost w-full cursor-not-allowed opacity-50"
+            >
+              Demo
+            </button>
           )}
 
           {project.githubUrl ? (
@@ -139,7 +159,12 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
               GitHub
             </a>
           ) : (
-            <button disabled className="btn btn-ghost w-full cursor-not-allowed opacity-50">GitHub</button>
+            <button
+              disabled
+              className="btn btn-ghost w-full cursor-not-allowed opacity-50"
+            >
+              GitHub
+            </button>
           )}
         </div>
       </div>

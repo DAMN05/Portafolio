@@ -1,22 +1,26 @@
-import type { Metadata } from 'next'
-import { Manrope, Syne , Space_Mono} from 'next/font/google'
-import './globals.css'
-import { SEO } from '@/shared/constants'
-import Navbar from '@/presentation/components/layout/Header/Navbar'
+import type { Metadata } from "next";
+import { Manrope, Syne, Space_Mono } from "next/font/google";
+import "./globals.css";
+import { SEO } from "@/shared/constants";
+import Navbar from "@/presentation/components/layout/Header/Navbar";
 
-const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' })
-const space_mono = Space_Mono({ subsets: ['latin'],weight: ['400','700'] ,variable: '--font-space-mono' })
-const syne = Syne({ subsets: ['latin'], variable: '--font-syne' })
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
+const space_mono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
+});
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SEO.URL),
   title: SEO.TITLE,
   description: SEO.DESCRIPTION,
   keywords: SEO.KEYWORDS,
-  authors: [{ name: 'Daniel Ramirez' }],
+  authors: [{ name: "Daniel Ramirez" }],
   openGraph: {
-    type: 'website',
-    locale: 'es_ES',
+    type: "website",
+    locale: "es_ES",
     url: SEO.URL,
     title: SEO.TITLE,
     description: SEO.DESCRIPTION,
@@ -31,7 +35,7 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: SEO.TITLE,
     description: SEO.DESCRIPTION,
     images: [SEO.OG_IMAGE],
@@ -42,17 +46,17 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="es" className="scroll-smooth">
@@ -61,5 +65,5 @@ export default function RootLayout({
         {children}
       </body>
     </html>
-  )
+  );
 }

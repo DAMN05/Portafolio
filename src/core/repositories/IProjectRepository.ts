@@ -1,5 +1,4 @@
-
-import { ProjectEntity } from '@/core/entities';
+import { ProjectEntity } from "@/core/entities";
 
 export interface IProjectRepository {
   /**

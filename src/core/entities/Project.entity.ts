@@ -1,5 +1,4 @@
-
-export type ProjectCategory = 'all' | 'web' | '3d' | 'mobile' | 'fullstack';
+export type ProjectCategory = "all" | "web" | "3d" | "mobile" | "fullstack";
 
 export class ProjectEntity {
   constructor(
@@ -14,9 +13,21 @@ export class ProjectEntity {
     public readonly githubUrl?: string,
     public readonly liveUrl?: string,
     public readonly featured: boolean = false,
-    public readonly completedAt?: string,
-    public readonly highlights?: string[]
+    public readonly completedAt?: string[],
+    public readonly highlights?: string[],
   ) {}
+
+  private parseCompletionDates(dates?: string[]): Date[] {
+    if (!dates) return [];
+    const normalize = (d: string) => d.trim().replace(/\.+$/g, "");
+    const toDate = (d: string) => {
+      const clean = normalize(d);
+      const ym = /^\d{4}-\d{2}$/;
+      const date = ym.test(clean) ? new Date(clean + "-01") : new Date(clean);
+      return isNaN(date.getTime()) ? null : date;
+    };
+    return dates.map(toDate).filter((d): d is Date => d !== null);
+  }
 
   /**
    * Verifica si el proyecto tiene una URL pública
@@ -35,21 +46,20 @@ export class ProjectEntity {
   /**
    * Obtiene el año de completación
    */
-  get completionYear(): string | undefined {
-    if (!this.completedAt) return undefined;
-    const date = new Date(this.completedAt);
-    return date.getFullYear().toString();
+  get completionYear(): string[] | undefined {
+    const dates = this.parseCompletionDates(this.completedAt);
+    if (!dates || dates.length === 0) return undefined;
+    return dates.map((d) => d.getFullYear().toString());
   }
 
   /**
    * Verifica si el proyecto es reciente (últimos 6 meses)
    */
   get isRecent(): boolean {
-    if (!this.completedAt) return false;
-    const completionDate = new Date(this.completedAt);
+    const completionDates = this.parseCompletionDates(this.completedAt);
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-    return completionDate >= sixMonthsAgo;
+    return completionDates.some((date) => date >= sixMonthsAgo);
   }
 
   /**
@@ -57,13 +67,13 @@ export class ProjectEntity {
    */
   getCategoryColor(): string {
     const colors: Record<ProjectCategory, string> = {
-      all: '#6B7280',
-      web: '#61DAFB',
-      fullstack: '#7C3AED',
-      '3d': '#FF6B6B',
-      mobile: '#4B5563'
+      all: "#6B7280",
+      web: "#61DAFB",
+      fullstack: "#7C3AED",
+      "3d": "#FF6B6B",
+      mobile: "#4B5563",
     };
-    return colors[this.category] || '#6B7280';
+    return colors[this.category] || "#6B7280";
   }
 
   /**
@@ -71,11 +81,11 @@ export class ProjectEntity {
    */
   getCategoryLabel(): string {
     const labels: Record<ProjectCategory, string> = {
-      all: 'Todos',
-      web: 'Web',
-      fullstack: 'Full Stack',
-      '3d': '3D/WebGL',
-      mobile: 'Mobile'
+      all: "Todos",
+      web: "Web",
+      fullstack: "Full Stack",
+      "3d": "3D/WebGL",
+      mobile: "Mobile",
     };
     return labels[this.category] || this.category;
   }

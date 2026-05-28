@@ -1,10 +1,9 @@
+export * from "./projects";
 
-export * from './projects';
+export * from "./skills";
 
-export * from './skills';
+export * from "./experience";
 
-export * from './experience';
+export * from "./contact";
 
-export * from './contact';
-
-export * from './social';
+export * from "./social";

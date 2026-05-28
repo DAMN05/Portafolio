@@ -1,6 +1,5 @@
-
-import { IProjectRepository } from '@/core/repositories';
-import { ProjectEntity } from '@/core/entities';
+import { IProjectRepository } from "@/core/repositories";
+import { ProjectEntity } from "@/core/entities";
 
 export class GetFeaturedProjectsUseCase {
   constructor(private projectRepository: IProjectRepository) {}

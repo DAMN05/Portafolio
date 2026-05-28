@@ -1,6 +1,4 @@
-
-
-export type ProjectCategory = 'all' | '3d'  | 'fullstack';
+export type ProjectCategory = "all" | "3d" | "fullstack";
 
 export interface Project {
   id: string;
@@ -14,7 +12,7 @@ export interface Project {
   githubUrl?: string;
   liveUrl?: string;
   featured: boolean;
-  completedAt: string;
+  completedAt: string[];
   highlights?: string[];
 }
 

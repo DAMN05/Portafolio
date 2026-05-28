@@ -1,23 +1,27 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState, ChangeEvent, FormEvent } from 'react';
-import { sendContactMessageUseCase } from '@/infrastructure/di/container';
-import { ContactFormData, ContactFormErrors, FormStatus } from '@/shared/types/contact.types';
-import { validateContactForm, sanitizeInput } from '@/shared/utils/validators';
-import { ContactMessageEntity } from '@/core/entities';
+import { useEffect, useRef, useState, ChangeEvent, FormEvent } from "react";
+import { sendContactMessageUseCase } from "@/infrastructure/di/container";
+import {
+  ContactFormData,
+  ContactFormErrors,
+  FormStatus,
+} from "@/shared/types/contact.types";
+import { validateContactForm, sanitizeInput } from "@/shared/utils/validators";
+import { ContactMessageEntity } from "@/core/entities";
 
 const initialFormData: ContactFormData = {
-  name: '',
-  email: '',
-  subject: '',
-  message: ''
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
 };
 
 export function useContactForm() {
   const [formData, setFormData] = useState<ContactFormData>(initialFormData);
   const [errors, setErrors] = useState<ContactFormErrors>({});
-  const [status, setStatus] = useState<FormStatus>('idle');
-  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -34,21 +38,25 @@ export function useContactForm() {
     }
 
     resetTimerRef.current = setTimeout(() => {
-      setStatus('idle');
-      setFeedbackMessage('');
+      setStatus("idle");
+      setFeedbackMessage("");
     }, 5000);
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: ['name', 'subject', 'message'].includes(name) ? value : sanitizeInput(value)
+      [name]: ["name", "subject", "message"].includes(name)
+        ? value
+        : sanitizeInput(value),
     }));
     if (errors[name as keyof ContactFormErrors]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: undefined
+        [name]: undefined,
       }));
     }
   };
@@ -57,44 +65,51 @@ export function useContactForm() {
     e.preventDefault();
 
     const validationErrors = validateContactForm(formData);
-    
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    setStatus('loading');
+    setStatus("loading");
     setErrors({});
-    setFeedbackMessage('');
+    setFeedbackMessage("");
 
     try {
       const contactMessage = new ContactMessageEntity(
-        '', // Generar un ID único si es necesario
+        "", // Generar un ID único si es necesario
         formData.name,
         formData.email,
         formData.subject,
         formData.message,
         new Date(),
-        'pending'
+        "pending",
       );
 
       const result = await sendContactMessageUseCase.execute(contactMessage);
 
       if (result.success) {
-        setStatus('success');
-        setFeedbackMessage('✓ ¡Mensaje enviado exitosamente! Te responderé pronto.');
+        setStatus("success");
+        setFeedbackMessage(
+          "✓ ¡Mensaje enviado exitosamente! Te responderé pronto.",
+        );
         setFormData(initialFormData);
       } else {
-        setStatus('error');
-        setFeedbackMessage(result.error || 'No pudimos enviar tu mensaje. Intenta nuevamente en unos segundos.');
-        console.error('Error al enviar el mensaje:', result.error);
+        setStatus("error");
+        setFeedbackMessage(
+          result.error ||
+            "No pudimos enviar tu mensaje. Intenta nuevamente en unos segundos.",
+        );
+        console.error("Error al enviar el mensaje:", result.error);
       }
 
       scheduleReset();
     } catch (error) {
-      console.error('Error inesperado:', error);
-      setStatus('error');
-      setFeedbackMessage('Ocurrió un error inesperado. Por favor intenta nuevamente.');
+      console.error("Error inesperado:", error);
+      setStatus("error");
+      setFeedbackMessage(
+        "Ocurrió un error inesperado. Por favor intenta nuevamente.",
+      );
 
       scheduleReset();
     }
@@ -103,8 +118,8 @@ export function useContactForm() {
   const resetForm = () => {
     setFormData(initialFormData);
     setErrors({});
-    setStatus('idle');
-    setFeedbackMessage('');
+    setStatus("idle");
+    setFeedbackMessage("");
     if (resetTimerRef.current) {
       clearTimeout(resetTimerRef.current);
       resetTimerRef.current = null;
@@ -118,6 +133,6 @@ export function useContactForm() {
     feedbackMessage,
     handleChange,
     handleSubmit,
-    resetForm
+    resetForm,
   };
 }

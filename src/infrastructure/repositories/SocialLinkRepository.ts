@@ -1,8 +1,7 @@
-
-import { ISocialLinkRepository } from '@/core/repositories';
-import { SocialLinkEntity } from '@/core/entities';
-import { SOCIAL_LINKS } from '@/shared/constants/contact.constants';
-import { SocialLink } from '@/shared/types/contact.types';
+import { ISocialLinkRepository } from "@/core/repositories";
+import { SocialLinkEntity } from "@/core/entities";
+import { SOCIAL_LINKS } from "@/shared/constants/contact.constants";
+import { SocialLink } from "@/shared/types/contact.types";
 
 export class SocialLinkRepository implements ISocialLinkRepository {
   /**
@@ -14,16 +13,16 @@ export class SocialLinkRepository implements ISocialLinkRepository {
       data.name,
       data.url,
       data.icon,
-      data.color
+      data.color,
     );
   }
 
   async getAll(): Promise<SocialLinkEntity[]> {
-    return SOCIAL_LINKS.map(s => this.toEntity(s));
+    return SOCIAL_LINKS.map((s) => this.toEntity(s));
   }
 
   async getById(id: string): Promise<SocialLinkEntity | null> {
-    const link = SOCIAL_LINKS.find(s => s.id === id);
+    const link = SOCIAL_LINKS.find((s) => s.id === id);
     return link ? this.toEntity(link) : null;
   }
 }

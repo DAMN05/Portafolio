@@ -1,5 +1,4 @@
-
-import { SkillEntity } from '@/core/entities';
+import { SkillEntity } from "@/core/entities";
 
 export interface ISkillRepository {
   /**
